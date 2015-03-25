@@ -16,12 +16,13 @@ public class CameraFollow : MonoBehaviour {
 	[SerializeField]
 	float camDistZ;
 
-	void Update () {
+	void FixedUpdate () {
 	
 		Vector3 targetPos = Target.position + Target.up * camDistY - Target.forward * camDistZ;
 
 		// Look forward at all times
 		transform.rotation = Quaternion.LookRotation (Target.forward, Target.up);
+
 		// Move towards targetPos
 		transform.position = Vector3.Lerp (transform.position, targetPos, Snapiness * Time.deltaTime);
 
