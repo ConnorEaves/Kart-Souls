@@ -18,7 +18,7 @@ public class KartStats : MonoBehaviour {
 
 	void OnGUI () {
 		string maxSpeed = new string ('|', (int)kartController.MaxSpeed);
-		string speed = new string ('|', (int)kartController.CurrentSpeed);
+		string speed = new string ('|', Mathf.Abs((int)kartController.CurrentSpeed));
 		string acceleration = new string ('|', (int)kartController.Acceleration);
 		string handling = new string ('|', (int)kartController.TurnSpeed * 10);
 

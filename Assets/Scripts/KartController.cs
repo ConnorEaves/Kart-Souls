@@ -30,7 +30,7 @@ public class KartController : MonoBehaviour {
 	public Material BreakLightOn;
 	public Material BreakLightOff;
 
-	[HideInInspector]
+	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
 	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
@@ -61,8 +61,11 @@ public class KartController : MonoBehaviour {
 	
 		if (_gas > 0 && isGrounded) {			// Are we accelerating?
 			CurrentSpeed += Acceleration * Time.deltaTime;
-		} else if (_gas < 0 && isGrounded) {	// Are we breaking?
+		} else if (_gas < 0 && isGrounded && CurrentSpeed > 0) {	// Are we breaking?
 			isBreaking = true;
+			CurrentSpeed -= Breaking * Time.deltaTime;
+		} else if (_gas < 0 && isGrounded && CurrentSpeed <= 0){	// Reverse if we are stopped
+			isBreaking = false;
 			CurrentSpeed -= Breaking * Time.deltaTime;
 		}else {									// If we're not
 			if (CurrentSpeed > 0) {
@@ -81,23 +84,24 @@ public class KartController : MonoBehaviour {
 			breakLightRight.material = BreakLightOff;
 		}
 
-		// Disallow going in reverse (for now)
-		CurrentSpeed = Mathf.Clamp (CurrentSpeed, 0.0f, MaxSpeed);
+		// Set max reverse speed to 1/5 MaxSpeed
+		Debug.Log (CurrentSpeed);
+		CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed/5.0f, MaxSpeed);
 	
 		// Take care of Kart animations
-		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * CurrentSpeed);
-		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * CurrentSpeed);
+		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
+		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * Mathf.Abs(CurrentSpeed));
 		FrontRightWheel.localRotation = Quaternion.Euler (_turning * TurnSpeed, 0, 0);
 		FrontLeftWheel.localRotation = Quaternion.Euler (_turning * TurnSpeed, 0, 0);
 
 		// Particle system controls
 		if (isGrounded) {
-			wheelParticleRight.startSpeed = CurrentSpeed;
-			wheelParticleRight.maxParticles = (int)CurrentSpeed * 10;
-			wheelParticleRight.gravityModifier = CurrentSpeed * 0.01f;
-			wheelParticleLeft.startSpeed = CurrentSpeed;
-			wheelParticleLeft.maxParticles = (int)CurrentSpeed * 10;
-			wheelParticleLeft.gravityModifier = CurrentSpeed * 0.01f;
+			wheelParticleRight.startSpeed = Mathf.Abs(CurrentSpeed);
+			wheelParticleRight.maxParticles = (int)Mathf.Abs(CurrentSpeed) * 10;
+			wheelParticleRight.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.01f;
+			wheelParticleLeft.startSpeed = Mathf.Abs(CurrentSpeed);
+			wheelParticleLeft.maxParticles = (int)Mathf.Abs(CurrentSpeed) * 10;
+			wheelParticleLeft.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.01f;
 		} else {
 			wheelParticleRight.startSpeed = 0;
 			wheelParticleRight.maxParticles = 0;
@@ -106,7 +110,6 @@ public class KartController : MonoBehaviour {
 			wheelParticleLeft.maxParticles = 0;
 			wheelParticleLeft.gravityModifier = 0;
 		}
-
 
 		// Actually perform the movement / rotations
 		transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
