@@ -70,6 +70,8 @@ public class KartController : MonoBehaviour {
 		}else {									// If we're not
 			if (CurrentSpeed > 0) {
 				CurrentSpeed -= Deceleration * Time.deltaTime;
+			} else if(CurrentSpeed < 0){
+				CurrentSpeed -= -Deceleration * Time.deltaTime;
 			} else {
 				isBreaking = true;
 			}
@@ -85,8 +87,11 @@ public class KartController : MonoBehaviour {
 		}
 
 		// Set max reverse speed to 1/5 MaxSpeed
-		Debug.Log (CurrentSpeed);
 		CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed/5.0f, MaxSpeed);
+
+		//Stop kart completely if it is near 0 speed
+		if (CurrentSpeed <= 0.1f && CurrentSpeed >= -0.1f)
+			CurrentSpeed = 0;
 	
 		// Take care of Kart animations
 		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
