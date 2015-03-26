@@ -10,6 +10,7 @@ public class KartController : MonoBehaviour {
 	public float Deceleration;	// Speed decrease per second
 
 	public float TurnSpeed;		// Turn radius of kart. Final turn radius adjusted by speed
+	public float SlideRotation;
 
 	public float Bank;			// Amount to rotate chasis during turns
 
@@ -25,6 +26,8 @@ public class KartController : MonoBehaviour {
 
 	public ParticleSystem WheelParticleRight;
 	public ParticleSystem WheelParticleLeft;
+	public ParticleSystem EngineParticleRight;
+	public ParticleSystem EngineParticleLeft;
 
 	// Reference to spawped materials
 	public Material BreakLightOn;
@@ -37,20 +40,22 @@ public class KartController : MonoBehaviour {
 	bool isGrounded;				// Is the Kart on the ground
 	bool isSliding;
 	Color groundColor;
-	public float slideRotation;
-
+	
 	// Cached references for performance
 	MeshRenderer breakLightRight;
 	MeshRenderer breakLightLeft;
-
 	ParticleSystem wheelParticleRight;
 	ParticleSystem wheelParticleLeft;
+	ParticleSystem engineParticleRight;
+	ParticleSystem engineParticleLeft;
 	
 	void Awake () {
 		breakLightRight = BreakLightRight.GetComponent<MeshRenderer> ();
 		breakLightLeft = BreakLightLeft.GetComponent<MeshRenderer> ();
 		wheelParticleRight = WheelParticleRight.GetComponent<ParticleSystem> ();
 		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
+		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
+		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
 	}
 
 	void FixedUpdate () {
@@ -99,20 +104,50 @@ public class KartController : MonoBehaviour {
 		//Stop kart completely if it is near 0 speed
 		if (CurrentSpeed <= 0.1f && CurrentSpeed >= -0.1f)
 			CurrentSpeed = 0;
-	
+
+		// Actually perform the movement / rotations
+		if (isGrounded)
+			transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
+		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime, Space.World);
+
+		//Sliding Algorithm
+		// Controllable sliding with Left Shift
+		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding && isGrounded) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+			isSliding = true;
+			transform.Rotate (0, 30, 0);
+			SlideRotation = 30;
+		}
+		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding && isGrounded) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+			isSliding = true;
+			transform.Rotate (0, -30, 0);
+			SlideRotation = 30;
+		}
+		// if ((isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)) || (isSliding && !isGrounded))) {
+		if (isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.LeftShift)) || (isSliding && !isGrounded))) {
+			isSliding = false;
+			transform.Rotate (0, -SlideRotation, 0);
+		}
+		if (isSliding && _turning > 0)
+			//transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
+			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
+		if (isSliding && _turning < 0)
+			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
+
 		// Take care of Kart animations
 		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
 		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * Mathf.Abs(CurrentSpeed));
-		FrontRightWheel.localRotation = Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		FrontLeftWheel.localRotation = Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-
+		FrontRightWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
+		FrontLeftWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
+		
 		// Particle system controls
 		if (isGrounded) {
 			wheelParticleRight.startSpeed = Mathf.Abs(CurrentSpeed);
 			wheelParticleRight.emissionRate = (int)Mathf.Abs(CurrentSpeed);
 			wheelParticleRight.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
 			wheelParticleRight.startColor = groundColor;
-
+			
 			wheelParticleLeft.startSpeed = Mathf.Abs(CurrentSpeed);
 			wheelParticleLeft.emissionRate = (int)Mathf.Abs(CurrentSpeed);
 			wheelParticleLeft.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
@@ -125,31 +160,8 @@ public class KartController : MonoBehaviour {
 			wheelParticleLeft.emissionRate = 0;
 			wheelParticleLeft.gravityModifier = 0;
 		}
-
-		// Actually perform the movement / rotations
-		if (isGrounded)
-			transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
-		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime, Space.World);
-
-		//Sliding Algorithm
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding && isGrounded) {
-			isSliding = true;
-			transform.Rotate (0, 30, 0);
-			slideRotation = 30;
-		}
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding && isGrounded) {
-			isSliding = true;
-			transform.Rotate (0, -30, 0);
-			slideRotation = 30;
-		}
-		if ((isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)) || (isSliding && !isGrounded))) {
-			isSliding = false;
-			transform.Rotate (0, -slideRotation, 0);
-		}
-		if (isSliding && _turning > 0)
-			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
-		if (isSliding && _turning < 0)
-			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
+		engineParticleRight.emissionRate = Mathf.Abs (10 + CurrentSpeed);
+		engineParticleLeft.emissionRate = Mathf.Abs (10 + CurrentSpeed);
 
 		#region Debug Vectors
 		Debug.DrawLine (transform.position, transform.position + transform.right * 3, Color.red);
