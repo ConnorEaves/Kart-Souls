@@ -35,7 +35,9 @@ public class KartController : MonoBehaviour {
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
 	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
+	bool isSliding;
 	Color groundColor;
+	public float slideRotation;
 
 	// Cached references for performance
 	MeshRenderer breakLightRight;
@@ -127,6 +129,26 @@ public class KartController : MonoBehaviour {
 		// Actually perform the movement / rotations
 		transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
 		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime, Space.World);
+
+		//Sliding Algorithm
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding) {
+			isSliding = true;
+			transform.Rotate (0, 30, 0);
+			slideRotation = 30;
+		}
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding) {
+			isSliding = true;
+			transform.Rotate (0, -30, 0);
+			slideRotation = 30;
+		}
+		if (isSliding && !((CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)))) {
+			isSliding = false;
+			transform.Rotate (0, -slideRotation, 0);
+		}
+		if (isSliding && _turning > 0)
+			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
+		if (isSliding && _turning < 0)
+			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
 
 		#region Debug Vectors
 		Debug.DrawLine (transform.position, transform.position + transform.right * 3, Color.red);
