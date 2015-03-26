@@ -13,8 +13,10 @@ public class KartController : MonoBehaviour {
 	public float SlideRotation;
 
 	public float Bank;			// Amount to rotate chasis during turns
+	public float BounceBack;
 
-	public LayerMask Track;		// Layermask to determain what is ground [NOT IMPLEMENTED]
+	public LayerMask Track;		// Layermask to determain what is ground
+	public LayerMask Walls;
 
 	// References to parts of Kart
 	public Transform Chasis;
@@ -42,6 +44,7 @@ public class KartController : MonoBehaviour {
 	Color groundColor;
 	
 	// Cached references for performance
+	Rigidbody rb;
 	MeshRenderer breakLightRight;
 	MeshRenderer breakLightLeft;
 	ParticleSystem wheelParticleRight;
@@ -50,6 +53,7 @@ public class KartController : MonoBehaviour {
 	ParticleSystem engineParticleLeft;
 	
 	void Awake () {
+		rb = GetComponent<Rigidbody> ();
 		breakLightRight = BreakLightRight.GetComponent<MeshRenderer> ();
 		breakLightLeft = BreakLightLeft.GetComponent<MeshRenderer> ();
 		wheelParticleRight = WheelParticleRight.GetComponent<ParticleSystem> ();
@@ -64,6 +68,7 @@ public class KartController : MonoBehaviour {
 		float _turning = Input.GetAxis ("Horizontal");
 
 		isGrounded = CheckGrounded ();
+		CheckCollision ();
 
 		// Only set isBreaking if we really are breaking
 		isBreaking = false;
@@ -166,6 +171,16 @@ public class KartController : MonoBehaviour {
 		Debug.DrawLine (transform.position, transform.position + transform.forward * 3, Color.blue);
 		#endregion
 
+	}
+
+	void CheckCollision () {
+		Ray ray = new Ray (transform.position + transform.up * 0.1f, transform.forward);
+		RaycastHit hit;
+		if (Physics.Raycast (ray, out hit, 1.5f, Walls)) {
+			CurrentSpeed = 0.0f;
+			rb.AddForce (new Vector3(0, 0, -BounceBack), ForceMode.Impulse);
+			Debug.Log ("Hit the wall");
+		}
 	}
 
 	// Checks to see if we're on the ground, and if we are, orients the Kart the proper way
