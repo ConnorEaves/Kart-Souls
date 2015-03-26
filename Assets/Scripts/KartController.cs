@@ -113,13 +113,13 @@ public class KartController : MonoBehaviour {
 		//Sliding Algorithm
 		// Controllable sliding with Left Shift
 		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding && isGrounded) {
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, 30, 0);
 			SlideRotation = 30;
 		}
 		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding && isGrounded) {
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, -30, 0);
 			SlideRotation = 30;
