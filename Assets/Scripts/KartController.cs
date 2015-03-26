@@ -127,21 +127,22 @@ public class KartController : MonoBehaviour {
 		}
 
 		// Actually perform the movement / rotations
-		transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
+		if (isGrounded)
+			transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
 		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime, Space.World);
 
 		//Sliding Algorithm
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, 30, 0);
 			slideRotation = 30;
 		}
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, -30, 0);
 			slideRotation = 30;
 		}
-		if (isSliding && !((CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)))) {
+		if ((isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)) || (isSliding && !isGrounded))) {
 			isSliding = false;
 			transform.Rotate (0, -slideRotation, 0);
 		}
