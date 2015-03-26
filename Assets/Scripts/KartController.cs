@@ -29,11 +29,13 @@ public class KartController : MonoBehaviour {
 	// Reference to spawped materials
 	public Material BreakLightOn;
 	public Material BreakLightOff;
+	public Material BreakLightReverse;
 
 	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
 	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
+	Color groundColor;
 
 	// Cached references for performance
 	MeshRenderer breakLightRight;
@@ -81,6 +83,9 @@ public class KartController : MonoBehaviour {
 		if (isBreaking) {
 			breakLightLeft.material = BreakLightOn;
 			breakLightRight.material = BreakLightOn;
+		} else if (CurrentSpeed < 0) {
+			breakLightLeft.material = BreakLightReverse;
+			breakLightRight.material = BreakLightReverse;
 		} else {
 			breakLightLeft.material = BreakLightOff;
 			breakLightRight.material = BreakLightOff;
@@ -102,17 +107,20 @@ public class KartController : MonoBehaviour {
 		// Particle system controls
 		if (isGrounded) {
 			wheelParticleRight.startSpeed = Mathf.Abs(CurrentSpeed);
-			wheelParticleRight.maxParticles = (int)Mathf.Abs(CurrentSpeed) * 10;
-			wheelParticleRight.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.01f;
+			wheelParticleRight.emissionRate = (int)Mathf.Abs(CurrentSpeed);
+			wheelParticleRight.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
+			wheelParticleRight.startColor = groundColor;
+
 			wheelParticleLeft.startSpeed = Mathf.Abs(CurrentSpeed);
-			wheelParticleLeft.maxParticles = (int)Mathf.Abs(CurrentSpeed) * 10;
-			wheelParticleLeft.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.01f;
+			wheelParticleLeft.emissionRate = (int)Mathf.Abs(CurrentSpeed);
+			wheelParticleLeft.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
+			wheelParticleLeft.startColor = groundColor;
 		} else {
 			wheelParticleRight.startSpeed = 0;
-			wheelParticleRight.maxParticles = 0;
+			wheelParticleRight.emissionRate = 0;
 			wheelParticleRight.gravityModifier = 0;
 			wheelParticleLeft.startSpeed = 0;
-			wheelParticleLeft.maxParticles = 0;
+			wheelParticleLeft.emissionRate = 0;
 			wheelParticleLeft.gravityModifier = 0;
 		}
 
@@ -136,6 +144,8 @@ public class KartController : MonoBehaviour {
 			transform.position = hit.point;
 			Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
 			transform.rotation = rot * transform.rotation;
+
+			groundColor = hit.collider.gameObject.GetComponent<MeshRenderer> ().material.color;
 
 			return true;
 		} else {

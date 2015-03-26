@@ -11,8 +11,10 @@ public class KartStats : MonoBehaviour {
 	GUIStyle style;
 
 	void Awake () {
-		style = new GUIStyle ();
 		kartController = Kart.GetComponentInParent<KartController> ();
+
+		style = new GUIStyle ();
+		style.normal.textColor = Color.yellow;
 		style.font = GUIFont;
 	}
 
