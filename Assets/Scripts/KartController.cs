@@ -112,25 +112,22 @@ public class KartController : MonoBehaviour {
 
 		//Sliding Algorithm
 		// Controllable sliding with Left Shift
-		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9) && !isSliding && isGrounded) {
+
 		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, 30, 0);
 			SlideRotation = 30;
 		}
-		// if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9) && !isSliding && isGrounded) {
 		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
 			isSliding = true;
 			transform.Rotate (0, -30, 0);
 			SlideRotation = -30;
 		}
-		if ((isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (_turning <= -0.9 || _turning >= 0.9)) ) || (isSliding && !isGrounded) || (isSliding && !(Input.GetKey (KeyCode.LeftShift))))  {
-		//if (isSliding && !(CurrentSpeed >= (0.9 * MaxSpeed) && (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.LeftShift)) || (isSliding && !isGrounded))) {
+		if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
 			isSliding = false;
-			transform.Rotate (0, -SlideRotation * 2, 0);
+			transform.Rotate (0, -SlideRotation, 0);
 		}
 		if (isSliding && _turning > 0)
-			//transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
 			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
 		if (isSliding && _turning < 0)
 			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
@@ -139,7 +136,7 @@ public class KartController : MonoBehaviour {
 		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
 		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * Mathf.Abs(CurrentSpeed));
 		FrontRightWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		FrontLeftWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
+		FrontLeftWheel.localRotation = isSliding ? Quaternion.Euler (_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
 		
 		// Particle system controls
 		if (isGrounded) {
