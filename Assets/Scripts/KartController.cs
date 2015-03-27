@@ -3,71 +3,41 @@ using System.Collections;
 
 // Attached to empty parent of Kart model parts
 public class KartController : MonoBehaviour {
-	
-	public float MaxSpeed;
+
+	public float CurrentSpeed;	// Speed we are going right now
+	public float MaxSpeed;		// Maximum allowed speed
 	public float Acceleration;	// Speed increase per second
 	public float Breaking;		// Speed decrease per second while breaking
-	public float Deceleration;	// Speed decrease per second
+	public float Deceleration;	// Speed decrease per second. Value should be obtained from TrackMaterial.
 
 	public float TurnSpeed;		// Turn radius of kart. Final turn radius adjusted by speed
 	public float SlideRotation;
 
-	public float Bank;			// Amount to rotate chasis during turns
 	public float BounceBack;
 
 	public LayerMask Track;		// Layermask to determain what is ground
 	public LayerMask Walls;
 
-	// References to parts of Kart
-	public Transform Chasis;
-	public Transform FrontRightWheel;
-	public Transform FrontLeftWheel;
-	public GameObject BreakLightRight;
-	public GameObject BreakLightLeft;
-	public Transform Player;
+	Rigidbody rb;
 
-	public ParticleSystem WheelParticleRight;
-	public ParticleSystem WheelParticleLeft;
-	public ParticleSystem EngineParticleRight;
-	public ParticleSystem EngineParticleLeft;
-
-	// Reference to spawped materials
-	public Material BreakLightOn;
-	public Material BreakLightOff;
-	public Material BreakLightReverse;
-
-	//[HideInInspector]
-	public float CurrentSpeed;		// Amount Kart will move forward this frame
 	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
-	bool isSliding;
-	Color groundColor;
-	
-	// Cached references for performance
-	Rigidbody rb;
-	MeshRenderer breakLightRight;
-	MeshRenderer breakLightLeft;
-	ParticleSystem wheelParticleRight;
-	ParticleSystem wheelParticleLeft;
-	ParticleSystem engineParticleRight;
-	ParticleSystem engineParticleLeft;
+	bool isDrifting;
 	
 	void Awake () {
-		rb = GetComponent<Rigidbody> ();
-		breakLightRight = BreakLightRight.GetComponent<MeshRenderer> ();
-		breakLightLeft = BreakLightLeft.GetComponent<MeshRenderer> ();
-		wheelParticleRight = WheelParticleRight.GetComponent<ParticleSystem> ();
-		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
-		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
-		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
 	}
 
 	void FixedUpdate () {
-		// Temp variables cached for performance
+
+		// Input variables
 		float _gas = Input.GetAxis ("Vertical");
 		float _turning = Input.GetAxis ("Horizontal");
+		bool _drifting = Input.GetKey (KeyCode.LeftShift);
 
-		isGrounded = CheckGrounded ();
+		isGrounded = CheckIfGrounded ();
+		if (isGrounded) {
+			EnforceMaxSpeed ();
+		}
 		CheckCollision ();
 
 		// Only set isBreaking if we really are breaking
@@ -91,18 +61,6 @@ public class KartController : MonoBehaviour {
 			}
 		}
 
-		// Turn break lights on
-		if (isBreaking) {
-			breakLightLeft.material = BreakLightOn;
-			breakLightRight.material = BreakLightOn;
-		} else if (CurrentSpeed < 0) {
-			breakLightLeft.material = BreakLightReverse;
-			breakLightRight.material = BreakLightReverse;
-		} else {
-			breakLightLeft.material = BreakLightOff;
-			breakLightRight.material = BreakLightOff;
-		}
-
 		// Set max reverse speed to 1/5 MaxSpeed
 		CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed/5.0f, MaxSpeed);
 
@@ -118,52 +76,24 @@ public class KartController : MonoBehaviour {
 		//Sliding Algorithm
 		// Controllable sliding with Left Shift
 
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
-			isSliding = true;
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isDrifting && isGrounded) {
+			isDrifting = true;
 			transform.Rotate (0, 30, 0);
 			SlideRotation = 30;
 		}
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
-			isSliding = true;
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isDrifting && isGrounded) {
+			isDrifting = true;
 			transform.Rotate (0, -30, 0);
 			SlideRotation = -30;
 		}
-		if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
-			isSliding = false;
+		if (isDrifting && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
+			isDrifting = false;
 			transform.Rotate (0, -SlideRotation, 0);
 		}
-		if (isSliding && _turning > 0)
+		if (isDrifting && _turning > 0)
 			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
-		if (isSliding && _turning < 0)
+		if (isDrifting && _turning < 0)
 			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
-
-		// Take care of Kart animations
-		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
-		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * Mathf.Abs(CurrentSpeed));
-		FrontRightWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		FrontLeftWheel.localRotation = isSliding ? Quaternion.Euler (_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		
-		// Particle system controls
-		if (isGrounded) {
-			wheelParticleRight.startSpeed = Mathf.Abs(CurrentSpeed);
-			wheelParticleRight.emissionRate = (int)Mathf.Abs(CurrentSpeed);
-			wheelParticleRight.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
-			wheelParticleRight.startColor = groundColor;
-			
-			wheelParticleLeft.startSpeed = Mathf.Abs(CurrentSpeed);
-			wheelParticleLeft.emissionRate = (int)Mathf.Abs(CurrentSpeed);
-			wheelParticleLeft.gravityModifier = Mathf.Abs(CurrentSpeed) * 0.1f;
-			wheelParticleLeft.startColor = groundColor;
-		} else {
-			wheelParticleRight.startSpeed = 0;
-			wheelParticleRight.emissionRate = 0;
-			wheelParticleRight.gravityModifier = 0;
-			wheelParticleLeft.startSpeed = 0;
-			wheelParticleLeft.emissionRate = 0;
-			wheelParticleLeft.gravityModifier = 0;
-		}
-		engineParticleRight.emissionRate = Mathf.Abs (10 + CurrentSpeed);
-		engineParticleLeft.emissionRate = Mathf.Abs (10 + CurrentSpeed);
 
 		#region Debug Vectors
 		Debug.DrawLine (transform.position, transform.position + transform.right * 3, Color.red);
@@ -171,6 +101,12 @@ public class KartController : MonoBehaviour {
 		Debug.DrawLine (transform.position, transform.position + transform.forward * 3, Color.blue);
 		#endregion
 
+	}
+
+	void EnforceMaxSpeed () {
+		if (CurrentSpeed > MaxSpeed) {
+			CurrentSpeed -= Deceleration;
+		}
 	}
 
 	void CheckCollision () {
@@ -184,16 +120,13 @@ public class KartController : MonoBehaviour {
 	}
 
 	// Checks to see if we're on the ground, and if we are, orients the Kart the proper way
-	bool CheckGrounded () {
+	bool CheckIfGrounded () {
 		Ray ray = new Ray ( transform.position + transform.up * 0.1f, -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 1.0f, Track)) {
 			transform.position = hit.point;
 			Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
 			transform.rotation = rot * transform.rotation;
-
-			groundColor = hit.collider.gameObject.GetComponent<MeshRenderer> ().material.color;
-
 			return true;
 		} else {
 			// Have Kart face World.Up when in the air
