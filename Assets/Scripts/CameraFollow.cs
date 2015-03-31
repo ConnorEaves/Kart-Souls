@@ -17,7 +17,7 @@ public class CameraFollow : MonoBehaviour {
 	[SerializeField]
 	float camDistZ;
 
-	void FixedUpdate () {
+	void LateUpdate () {
 	
 		Vector3 targetPos = Target.position + Target.up * camDistY - Target.forward * camDistZ;
 
