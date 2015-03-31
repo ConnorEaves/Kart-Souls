@@ -11,6 +11,7 @@ public class KartController : MonoBehaviour {
 	public float Deceleration;	// Speed decrease per second. Value should be obtained from TrackMaterial.
 	[Range (1.0f, 5.0f)]
 	public float TurnSpeed;		// Turn radius of kart. Final turn radius adjusted by speed
+	public float Driftiness;
 	public float GroundedDistance;
 
 	public float BounceBack;
@@ -23,12 +24,14 @@ public class KartController : MonoBehaviour {
 	bool isGrounded;			// Is the Kart on the ground
 	bool isGas;
 	bool isBraking;
-	bool isTurning;
+	bool isDrifting;
+	bool startedDrifting;
 
 	float accel;
 	float decel;
 	float brakeAmount;
 	float turnAmount;
+	float driftAmount;
 
 	TrackMaterial trackMaterial;
 	
@@ -85,10 +88,16 @@ public class KartController : MonoBehaviour {
 		if (isGrounded) {
 			isGas = Input.GetKey (KeyCode.Space);
 			isBraking = Input.GetKey (KeyCode.S);
+			isDrifting = Input.GetKey (KeyCode.LeftShift);
 			accel = Acceleration * trackMaterial.Grip * Time.deltaTime;
 			decel = Deceleration * trackMaterial.Grip * Time.deltaTime;
 			brakeAmount = Braking * trackMaterial.Grip * Time.deltaTime;
 			turnAmount = TurnSpeed * Input.GetAxis ("Horizontal") * Time.deltaTime;
+			driftAmount = 0;
+
+			if (!isDrifting) {
+				startedDrifting = false;
+			}
 		}
 	}
 
@@ -115,9 +124,19 @@ public class KartController : MonoBehaviour {
 				}
 			}
 
+			if ( isGas && turnAmount > 0 && isDrifting) {
+				// turnAmount *= 5;
+				// driftAmount = Driftiness * (1 + Input.GetAxis ("Horizontal"));
+			}
+
+			if ( isGas && turnAmount < 0 && isDrifting) {
+				// turnAmount *= 5;
+				// driftAmount = Driftiness * (Input.GetAxis ("Horizontal") - 1);
+			}
+
 			CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed / 5, MaxSpeed);
 			transform.Rotate (transform.up, turnAmount * CurrentSpeed);
 		}
-		transform.Translate (Vector3.forward * CurrentSpeed * Time.deltaTime);
+		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime + transform.right * -driftAmount * Time.deltaTime, Space.World);
 	}
 }
