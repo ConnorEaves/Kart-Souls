@@ -185,8 +185,7 @@ public class KartController : MonoBehaviour {
 
 	// Checks to see if we're on the ground, and if we are, orients the Kart the proper way
 	bool CheckGrounded () {
-		//Turned this off temporarily to stop bugs with new track
-		/* 
+
 		Ray ray = new Ray ( transform.position + transform.up * 0.1f, -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 1.0f, Track)) {
@@ -202,7 +201,6 @@ public class KartController : MonoBehaviour {
 			Quaternion rot = Quaternion.FromToRotation (transform.up, Vector3.up);
 			transform.rotation = rot * transform.rotation;
 		}
-		return false;*/
-		return true;
+		return false;
 	}
 }
