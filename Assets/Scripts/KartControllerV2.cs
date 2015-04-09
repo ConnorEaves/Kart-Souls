@@ -40,7 +40,6 @@ public class KartControllerV2 : MonoBehaviour {
 		kartInput (Input.GetAxis ("Vertical"),Input.GetAxis ("Horizontal"));
 				
 		isGrounded = CheckGrounded ();
-		Debug.Log (isGrounded);
 		//CheckCollision ();
 		
 		// Only set isBreaking if we really are breaking
