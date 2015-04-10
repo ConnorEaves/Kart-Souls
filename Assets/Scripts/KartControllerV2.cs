@@ -45,11 +45,10 @@ public class KartControllerV2 : MonoBehaviour {
 		// Only set isBreaking if we really are breaking
 		isBreaking = false;
 		
-		if (_gas > 0 && isGrounded) {			// Are we accelerating?
-			CurrentSpeed += Acceleration * Time.deltaTime;
-		} else if (_gas < 0 && isGrounded && CurrentSpeed > 0) {	// Are we breaking?
-			isBreaking = true;
-			CurrentSpeed -= Breaking * Time.deltaTime;
+		if (_gas > 0 && isGrounded) {			// Are we accelerating?\
+			rb.AddForce(transform.forward * Acceleration * Time.deltaTime * 10000 * _gas);
+		} else if (_gas < 0 && isGrounded) {	// Are we breaking?
+			rb.AddForce(transform.forward * Acceleration * Time.deltaTime * 10000 * _gas);
 		} else if (_gas < 0 && isGrounded && CurrentSpeed <= 0){	// Reverse if we are stopped
 			isBreaking = false;
 			CurrentSpeed -= Breaking * Time.deltaTime;
@@ -69,35 +68,35 @@ public class KartControllerV2 : MonoBehaviour {
 		CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed/5.0f, MaxSpeed);
 		
 		//Stop kart completely if it is near 0 speed
-		if (CurrentSpeed <= 0.1f && CurrentSpeed >= -0.1f)
-			CurrentSpeed = 0;
-		
+		//if (CurrentSpeed <= 0.1f && CurrentSpeed >= -0.1f)
+		//	CurrentSpeed = 0;
+		//
 		// Actually perform the movement / rotations
 		if (isGrounded)
-			transform.Rotate (transform.up, _turning * TurnSpeed * CurrentSpeed * Time.deltaTime);
-		transform.Translate (transform.forward * CurrentSpeed * Time.deltaTime, Space.World);
-		
-		//Sliding Algorithm
-		// Controllable sliding with Left Shift
-		
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
-			isSliding = true;
-			transform.Rotate (0, 30, 0);
-			SlideRotation = 30;
-		}
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
-			isSliding = true;
-			transform.Rotate (0, -30, 0);
-			SlideRotation = -30;
-		}
-		if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
-			isSliding = false;
-			transform.Rotate (0, -SlideRotation, 0);
-		}
-		if (isSliding && _turning > 0)
-			transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
-		if (isSliding && _turning < 0)
-			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
+			rb.AddTorque (transform.up * _turning * TurnSpeed * Time.deltaTime);
+
+		//
+		////Sliding Algorithm
+		//// Controllable sliding with Left Shift
+		//
+		//if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+		//	isSliding = true;
+		//	transform.Rotate (0, 30, 0);
+		//	SlideRotation = 30;
+		//}
+		//if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded) {
+		//	isSliding = true;
+		//	transform.Rotate (0, -30, 0);
+		//	SlideRotation = -30;
+		//}
+		//if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
+		//	isSliding = false;
+		//	transform.Rotate (0, -SlideRotation, 0);
+		//}
+		//if (isSliding && _turning > 0)
+		//	transform.Translate (transform.right * -CurrentSpeed * Time.deltaTime, Space.World);
+		//if (isSliding && _turning < 0)
+		//	transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
 		
 				
 
@@ -140,15 +139,15 @@ public class KartControllerV2 : MonoBehaviour {
 		Ray ray = new Ray ( transform.position + transform.up * 0.1f, -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 0.5f)) {
-			transform.position = hit.point;
+			//transform.position = hit.point;
 			Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
-			transform.rotation = rot * transform.rotation;
+			//transform.rotation = rot * transform.rotation;
 			
 			return true;
 		} else {
 			// Have Kart face World.Up when in the air
 			Quaternion rot = Quaternion.FromToRotation (transform.up, Vector3.up);
-			transform.rotation = rot * transform.rotation;
+			//transform.rotation = rot * transform.rotation;
 		}
 		return false;
 	}

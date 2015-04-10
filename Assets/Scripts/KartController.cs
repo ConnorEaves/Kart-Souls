@@ -107,7 +107,7 @@ public class KartController : MonoBehaviour {
 		CurrentSpeed = Mathf.Clamp (CurrentSpeed, -MaxSpeed/5.0f, MaxSpeed);
 
 		//Stop kart completely if it is near 0 speed
-		if (CurrentSpeed <= 0.1f && CurrentSpeed >= -0.1f)
+		if (CurrentSpeed <= 0.01f && CurrentSpeed >= -0.01f)
 			CurrentSpeed = 0;
 
 		// Actually perform the movement / rotations
@@ -189,7 +189,7 @@ public class KartController : MonoBehaviour {
 		Ray ray = new Ray ( transform.position + transform.up * 0.1f, -transform.up);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 1.0f, Track)) {
-			transform.position = hit.point;
+			//transform.position = hit.point;
 			Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
 			transform.rotation = rot * transform.rotation;
 
