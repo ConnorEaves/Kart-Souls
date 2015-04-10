@@ -7,11 +7,11 @@ public class KartStats : MonoBehaviour {
 	public GameObject Kart;
 	public Font GUIFont;
 
-	KartController kartController;
+	KartControllerV2 kartController;
 	GUIStyle style;
 
 	void Awake () {
-		kartController = Kart.GetComponentInParent<KartController> ();
+		kartController = Kart.GetComponentInParent<KartControllerV2> ();
 
 		style = new GUIStyle ();
 		style.normal.textColor = Color.yellow;
