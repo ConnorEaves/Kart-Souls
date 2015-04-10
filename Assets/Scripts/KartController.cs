@@ -68,7 +68,7 @@ public class KartController : MonoBehaviour {
 		float _turning = Input.GetAxis ("Horizontal");
 
 		isGrounded = CheckGrounded ();
-		CheckCollision ();
+
 
 		// Only set isBreaking if we really are breaking
 		isBreaking = false;
@@ -172,16 +172,23 @@ public class KartController : MonoBehaviour {
 		#endregion
 
 	}
+	void OnCollisionEnter(Collision coll){
+		float angle = 0;
+		if (coll.collider.tag == "wall") {
 
-	void CheckCollision () {
-		Ray ray = new Ray (transform.position + transform.up * 0.1f, transform.forward);
-		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit, 1.5f, Walls)) {
-			CurrentSpeed = 0.0f;
-			rb.AddForce (new Vector3(0, 0, -BounceBack), ForceMode.Impulse);
-			Debug.Log ("Hit the wall");
+			Ray ray = new Ray (transform.position + transform.up * 0.5f, transform.forward);
+			Debug.DrawRay(transform.position + transform.up * 0.5f, transform.forward);
+			RaycastHit hit;
+			if (Physics.Raycast (ray, out hit, 5.0f)){
+				angle = Vector3.Angle(hit.normal,transform.forward);
+			}
+
+			angle -=90;
+			CurrentSpeed = CurrentSpeed - (CurrentSpeed * angle/90);
+			Debug.Log(angle/90);
 		}
 	}
+
 
 	// Checks to see if we're on the ground, and if we are, orients the Kart the proper way
 	bool CheckGrounded () {
