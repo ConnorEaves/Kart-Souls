@@ -181,11 +181,12 @@ public class KartController : MonoBehaviour {
 			RaycastHit hit;
 			if (Physics.Raycast (ray, out hit, 5.0f)){
 				angle = Vector3.Angle(hit.normal,transform.forward);
+
 			}
 
-			angle -=90;
-			CurrentSpeed = CurrentSpeed - (CurrentSpeed * angle/90);
-			Debug.Log(angle/90);
+			CurrentSpeed -= (CurrentSpeed * (angle - 90)/90) / 2;
+
+
 		}
 	}
 
