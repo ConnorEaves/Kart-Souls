@@ -12,18 +12,10 @@ public class KartController : MonoBehaviour {
 	public float TurnSpeed;		// Turn radius of kart. Final turn radius adjusted by speed
 	public float SlideRotation;
 
-	public float Bank;			// Amount to rotate chasis during turns
-	public float BounceBack;
-
 	public LayerMask Track;		// Layermask to determain what is ground
 	public LayerMask Walls;
 
 	// References to parts of Kart
-	public Transform Chasis;
-	public Transform FrontRightWheel;
-	public Transform FrontLeftWheel;
-	public GameObject BreakLightRight;
-	public GameObject BreakLightLeft;
 	public Transform Player;
 
 	public ParticleSystem WheelParticleRight;
@@ -31,13 +23,10 @@ public class KartController : MonoBehaviour {
 	public ParticleSystem EngineParticleRight;
 	public ParticleSystem EngineParticleLeft;
 
-	// Reference to spawped materials
-	public Material BreakLightOn;
-	public Material BreakLightOff;
-	public Material BreakLightReverse;
 
 	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
+	//isBreaking currently not being used, to be removed if we don't use it for animations later
 	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
 	bool isSliding;
@@ -45,7 +34,6 @@ public class KartController : MonoBehaviour {
 	
 	// Cached references for performance
 	Rigidbody rb;
-	MeshRenderer breakLightRight;
 	MeshRenderer breakLightLeft;
 	ParticleSystem wheelParticleRight;
 	ParticleSystem wheelParticleLeft;
@@ -54,8 +42,6 @@ public class KartController : MonoBehaviour {
 	
 	void Awake () {
 		rb = GetComponent<Rigidbody> ();
-		breakLightRight = BreakLightRight.GetComponent<MeshRenderer> ();
-		breakLightLeft = BreakLightLeft.GetComponent<MeshRenderer> ();
 		wheelParticleRight = WheelParticleRight.GetComponent<ParticleSystem> ();
 		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
 		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
@@ -89,18 +75,6 @@ public class KartController : MonoBehaviour {
 			} else {
 				isBreaking = true;
 			}
-		}
-
-		// Turn break lights on
-		if (isBreaking) {
-			breakLightLeft.material = BreakLightOn;
-			breakLightRight.material = BreakLightOn;
-		} else if (CurrentSpeed < 0) {
-			breakLightLeft.material = BreakLightReverse;
-			breakLightRight.material = BreakLightReverse;
-		} else {
-			breakLightLeft.material = BreakLightOff;
-			breakLightRight.material = BreakLightOff;
 		}
 
 		// Set max reverse speed to 1/5 MaxSpeed
@@ -137,12 +111,6 @@ public class KartController : MonoBehaviour {
 		if (isSliding && _turning < 0)
 			transform.Translate (transform.right * CurrentSpeed * Time.deltaTime, Space.World);
 
-		// Take care of Kart animations
-		Chasis.localRotation = Quaternion.Euler (0, 0, _turning * Bank * Mathf.Abs(CurrentSpeed));
-		Player.localRotation = Quaternion.Euler (0, 0, _turning * -Bank * Mathf.Abs(CurrentSpeed));
-		FrontRightWheel.localRotation = isSliding ? Quaternion.Euler (-_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		FrontLeftWheel.localRotation = isSliding ? Quaternion.Euler (_turning * SlideRotation, 0, 0) : Quaternion.Euler (_turning * TurnSpeed, 0, 0);
-		
 		// Particle system controls
 		if (isGrounded) {
 			wheelParticleRight.startSpeed = Mathf.Abs(CurrentSpeed);
@@ -181,11 +149,9 @@ public class KartController : MonoBehaviour {
 			RaycastHit hit;
 			if (Physics.Raycast (ray, out hit, 5.0f)){
 				angle = Vector3.Angle(hit.normal,transform.forward);
-
 			}
 
-			CurrentSpeed -= (CurrentSpeed * (angle - 90)/90) / 2;
-
+			CurrentSpeed -= (CurrentSpeed * (angle - 90)/90);
 
 		}
 	}
