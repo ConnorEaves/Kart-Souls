@@ -6,7 +6,7 @@ public class AIController : MonoBehaviour {
 	private int navCounter;
 	private float forwardAngle;
 	private float rightAngle;
-	public GameObject[] navPoints;
+	private GameObject[] navPoints;
 
 	public Vector3 heading;
 
@@ -23,6 +23,7 @@ public class AIController : MonoBehaviour {
 		heading = navPoints [navCounter].transform.position - gameObject.transform.position;
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
+
 		//Debug.Log (rightAngle);
 		if (forwardAngle >= 0 && forwardAngle <= 90) {
 			if (rightAngle >= 0 && rightAngle <= 90) {
@@ -44,6 +45,8 @@ public class AIController : MonoBehaviour {
 			navCounter = 0;
 		else
 			navCounter++;
+
+		Debug.Log (navCounter);
 	}
 
 	void Forward(){
