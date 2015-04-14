@@ -147,6 +147,10 @@ public class KartController : MonoBehaviour {
 			}
 			CurrentSpeed -= (CurrentSpeed * (angle - 90)/90);
 		}
+		//The raycast would often go through the bars, the kart will always hit the bars at a near 90 degree angle so we just stop it completely on collision
+		if (coll.collider.tag == "bars") {
+			CurrentSpeed = 0.0f;
+		}
 	}
 
 
