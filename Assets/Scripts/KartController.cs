@@ -26,8 +26,6 @@ public class KartController : MonoBehaviour {
 
 	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
-	//isBreaking currently not being used, to be removed if we don't use it for animations later
-	bool isBreaking;				// Is the Kart slowing down
 	bool isGrounded;				// Is the Kart on the ground
 	bool isSliding;
 	Color groundColor;
@@ -41,7 +39,6 @@ public class KartController : MonoBehaviour {
 	ParticleSystem engineParticleLeft;
 	
 	void Awake () {
-		rb = GetComponent<Rigidbody> ();
 		wheelParticleRight = WheelParticleRight.GetComponent<ParticleSystem> ();
 		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
 		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
@@ -56,16 +53,14 @@ public class KartController : MonoBehaviour {
 		isGrounded = CheckGrounded ();
 
 
-		// Only set isBreaking if we really are breaking
-		isBreaking = false;
+
+
 	
 		if (_gas > 0 && isGrounded) {			// Are we accelerating?
 			CurrentSpeed += Acceleration * Time.deltaTime;
 		} else if (_gas < 0 && isGrounded && CurrentSpeed > 0) {	// Are we breaking?
-			isBreaking = true;
 			CurrentSpeed -= Breaking * Time.deltaTime;
 		} else if (_gas < 0 && isGrounded && CurrentSpeed <= 0){	// Reverse if we are stopped
-			isBreaking = false;
 			CurrentSpeed -= Breaking * Time.deltaTime;
 		}else {									// If we're not
 			if (CurrentSpeed > 0) {
@@ -73,7 +68,6 @@ public class KartController : MonoBehaviour {
 			} else if(CurrentSpeed < 0){
 				CurrentSpeed -= -Deceleration * Time.deltaTime;
 			} else {
-				isBreaking = true;
 			}
 		}
 
@@ -140,19 +134,18 @@ public class KartController : MonoBehaviour {
 		#endregion
 
 	}
+
+	//Reduce speed based on angle of impact with a wall. Up to a maximum of 100%
 	void OnCollisionEnter(Collision coll){
 		float angle = 0;
 		if (coll.collider.tag == "wall") {
-
 			Ray ray = new Ray (transform.position + transform.up * 0.5f, transform.forward);
 			Debug.DrawRay(transform.position + transform.up * 0.5f, transform.forward);
 			RaycastHit hit;
 			if (Physics.Raycast (ray, out hit, 5.0f)){
 				angle = Vector3.Angle(hit.normal,transform.forward);
 			}
-
 			CurrentSpeed -= (CurrentSpeed * (angle - 90)/90);
-
 		}
 	}
 
