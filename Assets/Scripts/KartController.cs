@@ -14,7 +14,10 @@ public class KartController : MonoBehaviour {
 
 	public LayerMask Track;		// Layermask to determain what is ground
 	public LayerMask Walls;
+	public bool playerController;
 
+	private float _gas;
+	private float _turning;
 	// References to parts of Kart
 	public Transform Player;
 
@@ -29,6 +32,7 @@ public class KartController : MonoBehaviour {
 	bool isGrounded;				// Is the Kart on the ground
 	bool isSliding;
 	Color groundColor;
+
 	
 	// Cached references for performance
 	Rigidbody rb;
@@ -47,9 +51,9 @@ public class KartController : MonoBehaviour {
 
 	void FixedUpdate () {
 		// Temp variables cached for performance
-		float _gas = Input.GetAxis ("Vertical");
-		float _turning = Input.GetAxis ("Horizontal");
 
+		if (playerController)
+			gameInput (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"));
 		isGrounded = CheckGrounded ();
 
 
@@ -173,5 +177,10 @@ public class KartController : MonoBehaviour {
 			transform.rotation = rot * transform.rotation;
 		}
 		return false;
+	}
+
+	public void gameInput(float gas, float turn){
+		_gas = gas;
+		_turning = turn;
 	}
 }
