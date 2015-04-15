@@ -7,6 +7,7 @@ public class AIController : MonoBehaviour {
 	private float forwardAngle;
 	private float rightAngle;
 	private GameObject[] navPoints;
+	private bool backing;
 
 	public Vector3 heading;
 
@@ -16,6 +17,7 @@ public class AIController : MonoBehaviour {
 		kartController = gameObject.GetComponent<KartController> ();
 		navCounter = 0;
 		navPoints = GameObject.FindGameObjectWithTag ("navPointsList").GetComponent<navPointsList>().NavList;
+		backing = false;
 	}
 	
 	// Update is called once per frame
@@ -25,7 +27,7 @@ public class AIController : MonoBehaviour {
 		rightAngle = Vector3.Angle(heading, transform.right);
 		Debug.DrawLine (navPoints [navCounter].transform.position, transform.position);
 		//Debug.Log (rightAngle);
-		if (forwardAngle >= 0 && forwardAngle <= 90) {
+		if (forwardAngle >= 0 && forwardAngle < 90 && !backing) {
 			if (forwardAngle >= 0 && forwardAngle <= 5){
 				Forward ();
 			}
@@ -41,8 +43,19 @@ public class AIController : MonoBehaviour {
 				Forward ();
 			}
 		}
-		if (forwardAngle > 90)
-			BackLeft ();
+		if (forwardAngle >= 90 || backing) {
+			backing = true;
+			if (forwardAngle >= 45){
+				if(rightAngle <= 90)
+					BackLeft ();
+			
+				if(rightAngle > 90)
+					BackRight ();
+			} else {
+				backing = false;
+			}
+		}
+			
 	}
 
 	public void HitNav(){
@@ -56,17 +69,14 @@ public class AIController : MonoBehaviour {
 
 	void Forward(){
 		kartController.gameInput (1, 0);
-		Debug.Log("forward");
 	}
 
 	void Left(){
 		kartController.gameInput (1, -1);
-		Debug.Log ("left");
 	}
 
 	void Right(){
 		kartController.gameInput (1, 1);
-		Debug.Log ("right");
 	}
 
 	void Back(){
