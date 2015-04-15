@@ -21,7 +21,7 @@ public class AIController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		heading = navPoints [navCounter].transform.position - gameObject.transform.position;
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
