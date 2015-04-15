@@ -23,10 +23,13 @@ public class AIController : MonoBehaviour {
 		heading = navPoints [navCounter].transform.position - gameObject.transform.position;
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
-
+		Debug.DrawLine (navPoints [navCounter].transform.position, transform.position);
 		//Debug.Log (rightAngle);
 		if (forwardAngle >= 0 && forwardAngle <= 90) {
-			if (rightAngle >= 0 && rightAngle <= 90) {
+			if (forwardAngle >= 0 && forwardAngle <= 5){
+				Forward ();
+			}
+			else if (rightAngle >= 0 && rightAngle <= 90) {
 
 				Right ();
 			}
@@ -38,6 +41,8 @@ public class AIController : MonoBehaviour {
 				Forward ();
 			}
 		}
+		if (forwardAngle > 90)
+			BackLeft ();
 	}
 
 	public void HitNav(){
