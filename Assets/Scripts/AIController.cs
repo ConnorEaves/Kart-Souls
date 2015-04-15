@@ -26,7 +26,6 @@ public class AIController : MonoBehaviour {
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
 		Debug.DrawLine (navPoints [navCounter].transform.position, transform.position);
-		//Debug.Log (rightAngle);
 		if (forwardAngle >= 0 && forwardAngle < 90 && !backing) {
 			if (forwardAngle >= 0 && forwardAngle <= 5){
 				Forward ();
@@ -65,8 +64,6 @@ public class AIController : MonoBehaviour {
 			else
 				navCounter++;
 		}
-
-		Debug.Log (navCounter);
 	}
 
 	void Forward(){
