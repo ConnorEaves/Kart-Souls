@@ -16,6 +16,6 @@ public class NavBehavior : MonoBehaviour {
 	void OnTriggerEnter(Collider coll){
 		ai = coll.gameObject.GetComponent<AIController> ();
 		if (ai != null)
-			ai.HitNav ();
+			ai.HitNav (this.gameObject);
 	}
 }

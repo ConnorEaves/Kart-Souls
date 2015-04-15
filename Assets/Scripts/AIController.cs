@@ -58,11 +58,13 @@ public class AIController : MonoBehaviour {
 			
 	}
 
-	public void HitNav(){
-		if (navCounter == navPoints.Length - 1)
-			navCounter = 0;
-		else
-			navCounter++;
+	public void HitNav(GameObject hitNav){
+		if (hitNav == navPoints [navCounter]) {
+			if (navCounter == navPoints.Length - 1)
+				navCounter = 0;
+			else
+				navCounter++;
+		}
 
 		Debug.Log (navCounter);
 	}
