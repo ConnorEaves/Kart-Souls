@@ -8,6 +8,7 @@ public class AIController : MonoBehaviour {
 	private float rightAngle;
 	private GameObject[] navPoints;
 	private bool backing;
+	private Vector3 randomizedNavPoint;
 
 	public Vector3 heading;
 
@@ -18,14 +19,15 @@ public class AIController : MonoBehaviour {
 		navCounter = 0;
 		navPoints = GameObject.FindGameObjectWithTag ("navPointsList").GetComponent<navPointsList>().NavList;
 		backing = false;
+		randomizedNavPoint = navPoints [navCounter].transform.position;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		heading = navPoints [navCounter].transform.position - gameObject.transform.position;
+		heading = randomizedNavPoint - gameObject.transform.position;
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
-		Debug.DrawLine (navPoints [navCounter].transform.position, transform.position);
+		Debug.DrawLine (randomizedNavPoint, transform.position);
 		if (forwardAngle >= 0 && forwardAngle < 90 && !backing) {
 			if (forwardAngle >= 0 && forwardAngle <= 5){
 				Forward ();
@@ -63,6 +65,10 @@ public class AIController : MonoBehaviour {
 				navCounter = 0;
 			else
 				navCounter++;
+			randomizedNavPoint = navPoints[navCounter].transform.position;
+			float randomRange = hitNav.GetComponent<SphereCollider>().radius * 8;
+			randomizedNavPoint.x = randomizedNavPoint.x + Random.Range(-randomRange,randomRange);
+			//heading = navPoints [navCounter].transform.position - gameObject.transform.position;
 		}
 	}
 
