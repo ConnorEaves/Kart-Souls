@@ -8,12 +8,15 @@ public class KartLapTimer : MonoBehaviour {
 	private float[] lapTime = new float[3];
 	private float startLap;
 	private int lapCounter;
+	private Canvas EndRace;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		checkpointCounter = 0;
 		firstLap = true;
 		lapCounter = 0;
 		StartLap ();
+		EndRace = GameObject.FindGameObjectWithTag ("endRaceCanvas").GetComponent<Canvas>();
+		EndRace.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -44,6 +47,8 @@ public class KartLapTimer : MonoBehaviour {
 			if (lapCounter >= 3){
 				gameObject.GetComponent<KartController> ().playerController = false;
 				gameObject.GetComponent<AIController>().enabled = true;
+
+				EndRace.enabled = true;
 			}
 		}
 	}
