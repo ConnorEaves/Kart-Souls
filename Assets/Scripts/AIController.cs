@@ -66,11 +66,9 @@ public class AIController : MonoBehaviour {
 			else
 				navCounter++;
 			randomizedNavPoint = navPoints[navCounter].transform.position;
-			float randomRange = hitNav.GetComponent<SphereCollider>().radius * 6;
+			float randomRange = hitNav.GetComponent<SphereCollider>().radius / 2;
 			randomizedNavPoint.x = randomizedNavPoint.x + Random.Range(-randomRange,randomRange);
-			randomRange = hitNav.GetComponent<SphereCollider>().radius * 6;
 			randomizedNavPoint.z = randomizedNavPoint.z + Random.Range(-randomRange,randomRange);
-			//heading = navPoints [navCounter].transform.position - gameObject.transform.position;
 		}
 	}
 
