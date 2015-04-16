@@ -40,6 +40,11 @@ public class KartLapTimer : MonoBehaviour {
 		Debug.Log (lapTime [lapCounter]);
 		lapCounter++;
 		StartLap ();
-
+		if (gameObject.GetComponent<KartController> ().playerController) {
+			if (lapCounter >= 3){
+				gameObject.GetComponent<KartController> ().playerController = false;
+				gameObject.GetComponent<AIController>().enabled = true;
+			}
+		}
 	}
 }

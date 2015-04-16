@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AIController : MonoBehaviour {
 	private KartController kartController;
-	private int navCounter;
+	public int navCounter;
 	private float forwardAngle;
 	private float rightAngle;
 	private GameObject[] navPoints;
