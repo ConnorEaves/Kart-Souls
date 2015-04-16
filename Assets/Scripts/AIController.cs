@@ -8,7 +8,7 @@ public class AIController : MonoBehaviour {
 	private float rightAngle;
 	private GameObject[] navPoints;
 	private bool backing;
-	private Vector3 randomizedNavPoint;
+	public Vector3 randomizedNavPoint;
 
 	public Vector3 heading;
 
@@ -19,7 +19,7 @@ public class AIController : MonoBehaviour {
 		navCounter = 0;
 		navPoints = GameObject.FindGameObjectWithTag ("navPointsList").GetComponent<navPointsList>().NavList;
 		backing = false;
-		randomizedNavPoint = navPoints [navCounter].transform.position;
+		RandomizeNavPoint(navPoints[navCounter].transform.position, navPoints[navCounter].GetComponent<SphereCollider>().radius / 2);
 	}
 	
 	// Update is called once per frame
@@ -28,23 +28,21 @@ public class AIController : MonoBehaviour {
 		forwardAngle = Vector3.Angle(heading, transform.forward);
 		rightAngle = Vector3.Angle(heading, transform.right);
 		Debug.DrawLine (randomizedNavPoint, transform.position);
-		if (forwardAngle >= 0 && forwardAngle < 90 && !backing) {
-			if (forwardAngle >= 0 && forwardAngle <= 5){
+
+		//If the point is in front of us
+		if (forwardAngle < 90 && !backing) {
+			if (forwardAngle <= 5){
 				Forward ();
 			}
-			else if (rightAngle >= 0 && rightAngle <= 90) {
-
+			else if (rightAngle <= 90) {
 				Right ();
 			}
-			else if (rightAngle > 90 && rightAngle <= 180){
+			else{
 				Left ();
-
-			} else {
-
-				Forward ();
 			}
 		}
-		if (forwardAngle >= 90 || backing) {
+		else {
+			//We use this to keep the kart backing up until it gets a decent angle of attack on the next nav point
 			backing = true;
 			if (forwardAngle >= 45){
 				if(rightAngle <= 90)
@@ -65,10 +63,8 @@ public class AIController : MonoBehaviour {
 				navCounter = 0;
 			else
 				navCounter++;
-			randomizedNavPoint = navPoints[navCounter].transform.position;
-			float randomRange = hitNav.GetComponent<SphereCollider>().radius / 2;
-			randomizedNavPoint.x = randomizedNavPoint.x + Random.Range(-randomRange,randomRange);
-			randomizedNavPoint.z = randomizedNavPoint.z + Random.Range(-randomRange,randomRange);
+			RandomizeNavPoint(navPoints[navCounter].transform.position, hitNav.GetComponent<SphereCollider>().radius / 2);
+
 		}
 	}
 
@@ -94,5 +90,12 @@ public class AIController : MonoBehaviour {
 
 	void BackRight(){
 		kartController.gameInput (-1, 1);
+	}
+
+	void RandomizeNavPoint(Vector3 point , float radius)
+	{
+		randomizedNavPoint = point;
+		randomizedNavPoint.x = randomizedNavPoint.x + Random.Range(-radius,radius);
+		randomizedNavPoint.z = randomizedNavPoint.z + Random.Range(-radius,radius);
 	}
 }
