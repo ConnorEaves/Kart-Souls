@@ -59,6 +59,7 @@ public class KartLapTimer : MonoBehaviour {
 				finalTime += lap;
 			}
 			GameObject.FindGameObjectWithTag("LapTimeManager").GetComponent<LapTimeManager>().AddTimeForDisplay(finalTime,gameObject.GetComponent<KartController>().kartName);
+			gameObject.GetComponent<KartController>().MaxSpeed = 30;
 			//Debug.Log(finalTime);
 		}
 	}
