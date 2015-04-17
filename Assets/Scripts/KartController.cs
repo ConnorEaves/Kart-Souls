@@ -3,7 +3,7 @@ using System.Collections;
 
 // Attached to empty parent of Kart model parts
 public class KartController : MonoBehaviour {
-	
+	public string kartName;
 	public float MaxSpeed;
 	public float Acceleration;	// Speed increase per second
 	public float Breaking;		// Speed decrease per second while breaking

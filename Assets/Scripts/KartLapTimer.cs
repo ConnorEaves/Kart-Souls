@@ -4,19 +4,23 @@ using System.Collections;
 public class KartLapTimer : MonoBehaviour {
 	public Collider[] checkpoint;
 	public int checkpointCounter;
+	public float finalTime;
+	public bool finished;
 	private bool firstLap;
 	private float[] lapTime = new float[3];
 	private float startLap;
 	private int lapCounter;
 	private Canvas EndRace;
-	// Use this for initialization
+
 	void Awake () {
 		checkpointCounter = 0;
 		firstLap = true;
 		lapCounter = 0;
 		StartLap ();
+
 		EndRace = GameObject.FindGameObjectWithTag ("endRaceCanvas").GetComponent<Canvas>();
 		EndRace.enabled = false;
+
 	}
 	
 	// Update is called once per frame
@@ -35,21 +39,27 @@ public class KartLapTimer : MonoBehaviour {
 	}
 
 	void StartLap(){
-		startLap = Time.realtimeSinceStartup;
+		startLap = Time.time;
 	}
 
 	void FinishLap(){
-		lapTime [lapCounter] = Time.realtimeSinceStartup - startLap;
-		Debug.Log (lapTime [lapCounter]);
+		lapTime [lapCounter] = Time.time - startLap;
 		lapCounter++;
 		StartLap ();
-		if (gameObject.GetComponent<KartController> ().playerController) {
-			if (lapCounter >= 3){
+
+		if (lapCounter >= 1){
+			finished = true;
+			if (gameObject.GetComponent<KartController> ().playerController) {
 				gameObject.GetComponent<KartController> ().playerController = false;
 				gameObject.GetComponent<AIController>().enabled = true;
 
 				EndRace.enabled = true;
 			}
+			foreach (float lap in lapTime){
+				finalTime += lap;
+			}
+			GameObject.FindGameObjectWithTag("LapTimeManager").GetComponent<LapTimeManager>().AddTimeForDisplay(finalTime,gameObject.GetComponent<KartController>().kartName);
+			//Debug.Log(finalTime);
 		}
 	}
 }
