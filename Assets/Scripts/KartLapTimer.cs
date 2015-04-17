@@ -47,7 +47,7 @@ public class KartLapTimer : MonoBehaviour {
 		lapCounter++;
 		StartLap ();
 
-		if (lapCounter >= 1){
+		if (lapCounter >= 3){
 			finished = true;
 			if (gameObject.GetComponent<KartController> ().playerController) {
 				gameObject.GetComponent<KartController> ().playerController = false;
