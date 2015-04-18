@@ -16,6 +16,16 @@ public class CameraFollow : MonoBehaviour {
 	float camDistY;
 	[SerializeField]
 	float camDistZ;
+	void Awake () {
+		GameObject[] karts = GameObject.FindGameObjectsWithTag ("kart");
+		foreach (GameObject kart in karts) {
+			if (kart.GetComponent<KartController> ().playerController) {
+				Target = kart.transform;
+				break;
+			}
+		
+		}
+	}
 
 	void FixedUpdate () {
 	
