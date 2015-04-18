@@ -17,6 +17,7 @@ public class KartController : MonoBehaviour {
 	public bool playerController;
 
 	private float _gas;
+	private float _brake;
 	private float _turning;
 	// References to parts of Kart
 	public Transform Player;
@@ -48,12 +49,31 @@ public class KartController : MonoBehaviour {
 		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
 		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
 	}
+	void Update (){
+		if (playerController) {
+			_turning = Input.GetAxis("Horizontal");
+			if (Input.GetButtonDown("Fire1")){
+				_gas = 1.0f;
+			}
+			if (Input.GetButtonUp("Fire1")){
+				_gas = 0.0f;
+			}
+			if (Input.GetButtonDown("Fire2")){
+				_brake = -1.0f;
+			}
+			if (Input.GetButtonUp("Fire2")){
+				_brake = 0.0f;
+			}
+			_gas = _gas + _brake;
+
+		}
+	}
 
 	void FixedUpdate () {
 		// Temp variables cached for performance
 
-		if (playerController)
-			gameInput (Input.GetAxis ("Vertical"), Input.GetAxis ("Horizontal"));
+
+
 		isGrounded = CheckGrounded ();
 
 
@@ -90,17 +110,17 @@ public class KartController : MonoBehaviour {
 		//Sliding Algorithm
 		// Controllable sliding with Left Shift
 
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded && playerController) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning >= 0.9 && Input.GetButton("Fire3")) && !isSliding && isGrounded && playerController) {
 			isSliding = true;
 			transform.Rotate (0, 30, 0);
 			SlideRotation = 30;
 		}
-		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetKey (KeyCode.LeftShift)) && !isSliding && isGrounded && playerController) {
+		if ((CurrentSpeed >= 0.9 * MaxSpeed && _turning <= -0.9 && Input.GetButton("Fire3")) && !isSliding && isGrounded && playerController) {
 			isSliding = true;
 			transform.Rotate (0, -30, 0);
 			SlideRotation = -30;
 		}
-		if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetKey (KeyCode.LeftShift))))  {
+		if (isSliding && ( (!(CurrentSpeed >= 0.9 * MaxSpeed && (_turning <= -0.9 || _turning >= 0.9))) || !isGrounded || !(Input.GetButton("Fire3"))))  {
 			isSliding = false;
 			transform.Rotate (0, -SlideRotation, 0);
 		}
