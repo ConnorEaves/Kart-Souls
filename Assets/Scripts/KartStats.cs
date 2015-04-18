@@ -19,6 +19,9 @@ public class KartStats : MonoBehaviour {
 			}
 			
 		}
+		if (Kart == null) {
+			Kart = karts [0];
+		}
 
 		kartController = Kart.GetComponentInParent<KartController> ();
 

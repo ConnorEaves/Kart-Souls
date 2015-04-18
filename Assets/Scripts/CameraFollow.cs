@@ -25,7 +25,11 @@ public class CameraFollow : MonoBehaviour {
 			}
 		
 		}
+		if (Target == null) {
+			Target = karts [0].transform;
+		}
 	}
+
 
 	void FixedUpdate () {
 	
