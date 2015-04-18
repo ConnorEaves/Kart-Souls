@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class KartLapTimer : MonoBehaviour {
-	public Collider[] checkpoint;
+	public GameObject[] checkpoint;
 	public int checkpointCounter;
 	public float finalTime;
 	public bool finished;
@@ -19,7 +19,7 @@ public class KartLapTimer : MonoBehaviour {
 		StartLap ();
 
 		EndRace = GameObject.FindGameObjectWithTag ("endRaceCanvas").GetComponent<Canvas>();
-		EndRace.enabled = false;
+		checkpoint = GameObject.FindGameObjectWithTag ("navPointsList").GetComponent<navPointsList> ().checkPointList;
 
 	}
 	
@@ -58,7 +58,7 @@ public class KartLapTimer : MonoBehaviour {
 			foreach (float lap in lapTime){
 				finalTime += lap;
 			}
-			GameObject.FindGameObjectWithTag("LapTimeManager").GetComponent<LapTimeManager>().AddTimeForDisplay(finalTime,gameObject.GetComponent<KartController>().kartName);
+			GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().AddTimeForDisplay(finalTime,gameObject.GetComponent<KartController>().kartName);
 			gameObject.GetComponent<KartController>().MaxSpeed = 30;
 			//Debug.Log(finalTime);
 		}

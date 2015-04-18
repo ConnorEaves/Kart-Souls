@@ -6,7 +6,7 @@ public class CheckpointBehavior : MonoBehaviour {
 	void OnTriggerEnter(Collider coll){
 		KartLapTimer lapTimer = coll.GetComponent<KartLapTimer> ();
 
-		if (this.gameObject.GetComponent<BoxCollider>() == lapTimer.checkpoint[lapTimer.checkpointCounter])
+		if (this.gameObject == lapTimer.checkpoint[lapTimer.checkpointCounter])
 			lapTimer.HitCheckpoint ();
 	}
 }
