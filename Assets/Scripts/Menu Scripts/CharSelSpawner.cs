@@ -12,12 +12,15 @@ public class CharSelSpawner : MonoBehaviour {
 	void Start () 
     {
         savedPlayer = PlayerPrefs.GetInt("charSelected");
+		CameraFollow camera = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<CameraFollow>();
 
         if (savedPlayer == 1)
         {
+			camera.Target = karto1.transform;
             Debug.Log(savedPlayer);
             karto1.GetComponent<AIController>().enabled = false;
             karto1.GetComponent<KartController>().playerController = true;
+
 
             karto2.GetComponent<AIController>().enabled = true;
             karto2.GetComponent<KartController>().playerController = false;
@@ -29,6 +32,7 @@ public class CharSelSpawner : MonoBehaviour {
         else if(savedPlayer == 2)
         {
             Debug.Log(savedPlayer);
+			camera.Target = karto2.transform;
             karto2.GetComponent<AIController>().enabled = false;
             karto2.GetComponent<KartController>().playerController = true;
 
@@ -42,6 +46,7 @@ public class CharSelSpawner : MonoBehaviour {
         else if(savedPlayer == 3)
         {
             Debug.Log(savedPlayer);
+			camera.Target = karto3.transform;
             karto3.GetComponent<AIController>().enabled = false;
             karto3.GetComponent<KartController>().playerController = true;
 
