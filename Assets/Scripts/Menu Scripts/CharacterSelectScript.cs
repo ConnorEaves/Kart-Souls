@@ -2,7 +2,11 @@
 using System.Collections;
 using UnityEngine.UI;
 
+
 public class CharacterSelectScript : MonoBehaviour {
+
+    int charSelected = 0;
+    
     public Canvas MMenuCanvas;
     public Canvas CharMenuCanvas;
     public Canvas MapMenuCanvas;
@@ -36,6 +40,9 @@ public class CharacterSelectScript : MonoBehaviour {
     }
     public void Player1Pressed()
     {
+        charSelected = 1;
+        PlayerPrefs.SetInt("charSelected", (charSelected));
+        print(PlayerPrefs.GetInt("charSelected"));
         MMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = true;
         CharMenuCanvas.enabled = false;
@@ -43,6 +50,9 @@ public class CharacterSelectScript : MonoBehaviour {
 
     public void Player2Pressed()
     {
+        charSelected = 2;
+        PlayerPrefs.SetInt("charSelected", (charSelected));
+        print(PlayerPrefs.GetInt("charSelected"));
         MMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = true;
         CharMenuCanvas.enabled = false;
@@ -50,6 +60,9 @@ public class CharacterSelectScript : MonoBehaviour {
 
     public void Player3Pressed()
     {
+        charSelected = 3;
+        PlayerPrefs.SetInt("charSelected", (charSelected));
+        print(PlayerPrefs.GetInt("charSelected"));
         MMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = true;
         CharMenuCanvas.enabled = false;

@@ -39,7 +39,7 @@ public class MainMenuScript : MonoBehaviour {
 
     public void ControlsPressed()
     {
-        Application.LoadLevel(5);
+        Application.LoadLevel(4);
     }
 	
     public void StartGamePressed()

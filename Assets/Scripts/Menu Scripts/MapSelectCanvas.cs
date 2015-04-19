@@ -40,11 +40,11 @@ public class MapSelectCanvas : MonoBehaviour {
 
     public void Map2Pressed()
     {
-        Application.LoadLevel(1);
+        Application.LoadLevel(2);
     }
 
     public void Map3Pressed()
     {
-        Application.LoadLevel(1);
+        Application.LoadLevel(3);
     }
 }
