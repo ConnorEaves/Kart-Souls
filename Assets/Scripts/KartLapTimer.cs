@@ -11,6 +11,7 @@ public class KartLapTimer : MonoBehaviour {
 	private float startLap;
 	private int lapCounter;
 	private Canvas EndRace;
+	private Canvas HUD;
 
 	void Awake () {
 		checkpointCounter = 0;
@@ -18,6 +19,7 @@ public class KartLapTimer : MonoBehaviour {
 		lapCounter = 0;
 		StartLap ();
 
+		HUD = GameObject.FindWithTag ("HUDCanvas").GetComponent<Canvas> ();
 		EndRace = GameObject.FindGameObjectWithTag ("endRaceCanvas").GetComponent<Canvas>();
 		checkpoint = GameObject.FindGameObjectWithTag ("navPointsList").GetComponent<navPointsList> ().checkPointList;
 
@@ -54,6 +56,7 @@ public class KartLapTimer : MonoBehaviour {
 				gameObject.GetComponent<AIController>().enabled = true;
 
 				EndRace.enabled = true;
+				HUD.enabled = false;
 			}
 			foreach (float lap in lapTime){
 				finalTime += lap;
