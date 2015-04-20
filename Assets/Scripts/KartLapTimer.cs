@@ -28,7 +28,7 @@ public class KartLapTimer : MonoBehaviour {
 
 	}
 	public void HitCheckpoint() {
-		if (checkpointCounter == 0 && !firstLap)
+		if (checkpointCounter == 0 && !firstLap  && !finished)
 			FinishLap ();
 		if (checkpointCounter == checkpoint.Length - 1) {
 			checkpointCounter = 0;
