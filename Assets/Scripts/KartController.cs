@@ -181,15 +181,18 @@ public class KartController : MonoBehaviour {
 	// Checks to see if we're on the ground, and if we are, orients the Kart the proper way
 	bool CheckGrounded () {
 
-		Ray ray = new Ray ( transform.position + transform.up * 0.1f, -transform.up);
+		Ray ray = new Ray ( transform.position + transform.up * 0.1f + transform.forward * -0.5f, -transform.up);
+		Ray ray1 = new Ray ( transform.position + transform.up * 0.1f + transform.forward * 0.5f, -transform.up);
 		RaycastHit hit;
+		RaycastHit hit1;
 		if (Physics.Raycast (ray, out hit, 1.0f, Track)) {
-			//transform.position = hit.point;
-			Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
-			transform.rotation = rot * transform.rotation;
-
-			groundColor = hit.collider.gameObject.GetComponent<MeshRenderer> ().material.color;
-
+			if (Physics.Raycast (ray1, out hit1, 1.0f, Track)) {
+				if (hit.normal == hit1.normal){
+				//transform.position = hit.point;
+				Quaternion rot = Quaternion.FromToRotation (transform.up, hit.normal);
+				transform.rotation = rot * transform.rotation;
+				}
+			}
 			return true;
 		} else {
 			// Have Kart face World.Up when in the air
