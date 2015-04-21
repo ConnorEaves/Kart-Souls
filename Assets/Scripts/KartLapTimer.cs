@@ -61,6 +61,8 @@ public class KartLapTimer : MonoBehaviour {
 			foreach (float lap in lapTime){
 				finalTime += lap;
 			}
+			finalTime -= 3.0f;
+
 			GameObject.FindGameObjectWithTag("SceneManager").GetComponent<SceneManager>().AddTimeForDisplay(finalTime,gameObject.GetComponent<KartController>().kartName);
 			gameObject.GetComponent<KartController>().MaxSpeed = 30;
 			//Debug.Log(finalTime);
