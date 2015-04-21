@@ -8,10 +8,8 @@ public class CharSelSpawner : MonoBehaviour {
 
     int savedPlayer = 0;
 
-	//HUDSpedometer spedometer;
-
 	// Use this for initialization
-	void Start () 
+	void Awake () 
     {
         savedPlayer = PlayerPrefs.GetInt("charSelected");
 		CameraFollow camera = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<CameraFollow>();
