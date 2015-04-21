@@ -2,17 +2,24 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class HUDSpedometer : MonoBehaviour {
+// TOUCH THIS CODE AND I MURDER YOU
 
-	public GameObject PlayerKart;
+public class HUDSpedometer : MonoBehaviour {
 
 	KartController playerKartController;
 
-	void Awake () {
-		playerKartController = PlayerKart.GetComponent<KartController> ();
-	}
 
 	void Update () {
+		if (playerKartController == null) {
+			GameObject[] karts = GameObject.FindGameObjectsWithTag("kart");
+			foreach (GameObject kart in karts){
+				if (kart.GetComponent<KartController>().playerController){
+					playerKartController = kart.GetComponent<KartController>();
+					break;
+				}
+			}
+
+		}
 		float speed = playerKartController.CurrentSpeed;
 		transform.rotation = Quaternion.Euler (0, 0, -Mathf.Abs (speed) * 2.0f);
 	}

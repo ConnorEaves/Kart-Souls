@@ -8,16 +8,22 @@ public class CharSelSpawner : MonoBehaviour {
 
     int savedPlayer = 0;
 
+	//HUDSpedometer spedometer;
+
 	// Use this for initialization
 	void Start () 
     {
         savedPlayer = PlayerPrefs.GetInt("charSelected");
 		CameraFollow camera = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<CameraFollow>();
 
+		//spedometer = GameObject.Find ("Needle Pivot").GetComponent<HUDSpedometer> ();
+
         if (savedPlayer == 1)
         {
 			camera.Target = karto1.transform;
-            Debug.Log(savedPlayer);
+			//spedometer.PlayerKart = karto1;
+            Debug.Log( "Saved Player " + savedPlayer);
+
             karto1.GetComponent<AIController>().enabled = false;
             karto1.GetComponent<KartController>().playerController = true;
 
@@ -31,13 +37,15 @@ public class CharSelSpawner : MonoBehaviour {
 
         else if(savedPlayer == 2)
         {
-            Debug.Log(savedPlayer);
+			Debug.Log( "Saved Player " + savedPlayer);
+			//spedometer.PlayerKart = karto2;
 			camera.Target = karto2.transform;
-            karto2.GetComponent<AIController>().enabled = false;
-            karto2.GetComponent<KartController>().playerController = true;
 
             karto1.GetComponent<AIController>().enabled = true;
             karto1.GetComponent<KartController>().playerController = false;
+
+			karto2.GetComponent<AIController>().enabled = false;
+			karto2.GetComponent<KartController>().playerController = true;
 
             karto3.GetComponent<AIController>().enabled = true;
             karto3.GetComponent<KartController>().playerController = false;
@@ -45,17 +53,20 @@ public class CharSelSpawner : MonoBehaviour {
 
         else if(savedPlayer == 3)
         {
-            Debug.Log(savedPlayer);
+			Debug.Log( "Saved Player " + savedPlayer);
+			//spedometer.PlayerKart = karto3;
 			camera.Target = karto3.transform;
-            karto3.GetComponent<AIController>().enabled = false;
-            karto3.GetComponent<KartController>().playerController = true;
 
             karto1.GetComponent<AIController>().enabled = true;
             karto1.GetComponent<KartController>().playerController = false;
 
             karto2.GetComponent<AIController>().enabled = true;
             karto2.GetComponent<KartController>().playerController = false;
+
+			karto3.GetComponent<AIController>().enabled = false;
+			karto3.GetComponent<KartController>().playerController = true;
         }
+		
 	}
 	
 	// Update is called once per frame

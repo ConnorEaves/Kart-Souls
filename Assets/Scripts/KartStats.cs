@@ -10,7 +10,8 @@ public class KartStats : MonoBehaviour {
 	KartController kartController;
 	GUIStyle style;
 
-	void Awake () {
+	void GetKart () {
+
 		GameObject[] karts = GameObject.FindGameObjectsWithTag ("kart");
 		foreach (GameObject kart in karts) {
 			if (kart.GetComponent<KartController> ().playerController) {
@@ -30,15 +31,4 @@ public class KartStats : MonoBehaviour {
 		style.font = GUIFont;
 	}
 
-	void OnGUI () {
-		string maxSpeed = new string ('|', (int)kartController.MaxSpeed);
-		string speed = new string ('|', Mathf.Abs((int)kartController.CurrentSpeed));
-		string acceleration = new string ('|', (int)kartController.Acceleration);
-		string handling = new string ('|', (int)kartController.TurnSpeed * 10);
-
-		GUILayout.Label ("MaxSpeed:     " + maxSpeed, style);
-		GUILayout.Label ("Speed:        " + speed, style);
-		GUILayout.Label ("Acceleration: " + acceleration, style);
-		GUILayout.Label ("Handling:     " + handling, style);
-	}
 }
