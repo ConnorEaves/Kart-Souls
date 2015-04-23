@@ -27,6 +27,11 @@ public class KartController : MonoBehaviour {
 	public ParticleSystem EngineParticleRight;
 	public ParticleSystem EngineParticleLeft;
 
+	//reference to animator
+	public Animator anim;
+	//for tracking animation
+	private int animationIsPlaying;
+
 
 	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
@@ -48,6 +53,8 @@ public class KartController : MonoBehaviour {
 		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
 		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
 		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
+		//initialize animationIsPlaying
+		animationIsPlaying = 0;
 	}
 	void Update (){
 		if (playerController) {
@@ -67,6 +74,33 @@ public class KartController : MonoBehaviour {
 			_gas = _gas + _brake;
 
 		}
+	}
+
+	void LateUpdate(){
+		if (playerController) {
+			_turning = Input.GetAxis ("Horizontal");
+			
+			//Determine which turning animation to play
+			if (_turning < 0) {
+				if (animationIsPlaying != 1) {
+					anim.SetTrigger ("LeftTurn");
+					animationIsPlaying = 1;
+					
+				}
+			}
+			if (_turning > 0) {
+				if (animationIsPlaying != 2) {
+					anim.SetTrigger ("RightTurn");
+					animationIsPlaying = 2;
+				}
+			}
+			if (_turning == 0) {
+				anim.SetTrigger ("Idle");
+				animationIsPlaying = 0;
+			}
+		} else {
+			anim.SetTrigger ("Idle");
+			animationIsPlaying = 0;}
 	}
 
 	void FixedUpdate () {
