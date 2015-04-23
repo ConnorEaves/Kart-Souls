@@ -9,7 +9,7 @@ public class KartLapTimer : MonoBehaviour {
 	private bool firstLap;
 	private float[] lapTime = new float[3];
 	private float startLap;
-	private int lapCounter;
+	public int lapCounter;
 	private Canvas EndRace;
 	private Canvas HUD;
 
