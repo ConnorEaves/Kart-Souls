@@ -101,11 +101,13 @@ public class KartController : MonoBehaviour {
 				}
 			}
 		else {
-			anim.ResetTrigger("LeftTurn");
-			anim.ResetTrigger("RightTurn");
-			anim.SetTrigger ("Idle");
+			if (animationIsPlaying != 0){
+				anim.ResetTrigger("LeftTurn");
+				anim.ResetTrigger("RightTurn");
+				anim.SetTrigger ("Idle");
 
-			animationIsPlaying = 0;
+				animationIsPlaying = 0;
+			}
 		}
 			 //else {
 			//anim.SetTrigger ("Idle");
