@@ -76,10 +76,8 @@ public class KartController : MonoBehaviour {
 		}
 	}
 
+
 	void LateUpdate(){
-		if (playerController) {
-			_turning = Input.GetAxis ("Horizontal");
-			
 			//Determine which turning animation to play
 			if (_turning < 0) {
 				if (animationIsPlaying != 1) {
@@ -88,17 +86,17 @@ public class KartController : MonoBehaviour {
 					
 				}
 			}
-			if (_turning > 0) {
+			else if (_turning > 0) {
 				if (animationIsPlaying != 2) {
 					anim.SetTrigger ("RightTurn");
 					animationIsPlaying = 2;
 				}
 			}
-			if (_turning == 0) {
+			else if (_turning == 0) {
 				anim.SetTrigger ("Idle");
 				animationIsPlaying = 0;
 			}
-		} else {
+			 else {
 			anim.SetTrigger ("Idle");
 			animationIsPlaying = 0;}
 	}
