@@ -25,7 +25,6 @@ public class CharacterSelectScript : MonoBehaviour {
         Char1But= Char1But.GetComponent<Button>();
         Char2But = Char2But.GetComponent<Button>();
         Char3But = Char3But.GetComponent<Button>();
-        Char4But = Char4But.GetComponent<Button>();
 	}
 	
 	// Update is called once per frame
@@ -63,13 +62,6 @@ public class CharacterSelectScript : MonoBehaviour {
         charSelected = 3;
         PlayerPrefs.SetInt("charSelected", (charSelected));
         print(PlayerPrefs.GetInt("charSelected"));
-        MMenuCanvas.enabled = false;
-        MapMenuCanvas.enabled = true;
-        CharMenuCanvas.enabled = false;
-    }
-
-   public void Player4Pressed()
-    {
         MMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = true;
         CharMenuCanvas.enabled = false;
