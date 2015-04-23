@@ -59,16 +59,16 @@ public class KartController : MonoBehaviour {
 	void Update (){
 		if (playerController) {
 			_turning = Input.GetAxis("Horizontal");
-			if (Input.GetButtonDown("Fire1")){
+			if (Input.GetButton("Fire1")){
 				_gas = 1.0f;
 			}
-			if (Input.GetButtonUp("Fire1")){
+			else {
 				_gas = 0.0f;
 			}
-			if (Input.GetButtonDown("Fire2")){
+			if (Input.GetButton("Fire2")){
 				_brake = -1.0f;
 			}
-			if (Input.GetButtonUp("Fire2")){
+			else {
 				_brake = 0.0f;
 			}
 			_gas = _gas + _brake;
@@ -79,26 +79,37 @@ public class KartController : MonoBehaviour {
 
 	void LateUpdate(){
 			//Determine which turning animation to play
-			if (_turning < 0) {
+		//float turnInput = Input.GetAxisRaw ("Horizontal");
+		if (_turning < -0.1f){
 				if (animationIsPlaying != 1) {
+					anim.ResetTrigger("RightTurn");
+					anim.ResetTrigger("Idle");
 					anim.SetTrigger ("LeftTurn");
+		
+
 					animationIsPlaying = 1;
-					
+	
 				}
 			}
-			else if (_turning > 0) {
+		else if (_turning > 0.1f) {
 				if (animationIsPlaying != 2) {
+					anim.ResetTrigger("LeftTurn");
+					anim.ResetTrigger("Idle");
 					anim.SetTrigger ("RightTurn");
+
 					animationIsPlaying = 2;
 				}
 			}
-			else if (_turning == 0) {
-				anim.SetTrigger ("Idle");
-				animationIsPlaying = 0;
-			}
-			 else {
+		else {
+			anim.ResetTrigger("LeftTurn");
+			anim.ResetTrigger("RightTurn");
 			anim.SetTrigger ("Idle");
-			animationIsPlaying = 0;}
+
+			animationIsPlaying = 0;
+		}
+			 //else {
+			//anim.SetTrigger ("Idle");
+			//animationIsPlaying = 0;}
 	}
 
 	void FixedUpdate () {
