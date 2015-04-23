@@ -27,6 +27,11 @@ public class KartController : MonoBehaviour {
 	public ParticleSystem EngineParticleRight;
 	public ParticleSystem EngineParticleLeft;
 
+	//reference to animator
+	public Animator anim;
+	//for tracking animation
+	private int animationIsPlaying;
+
 
 	//[HideInInspector]
 	public float CurrentSpeed;		// Amount Kart will move forward this frame
@@ -48,25 +53,65 @@ public class KartController : MonoBehaviour {
 		wheelParticleLeft = WheelParticleLeft.GetComponent<ParticleSystem> ();
 		engineParticleRight = EngineParticleRight.GetComponent<ParticleSystem> ();
 		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
+		//initialize animationIsPlaying
+		animationIsPlaying = 0;
 	}
 	void Update (){
 		if (playerController) {
 			_turning = Input.GetAxis("Horizontal");
-			if (Input.GetButtonDown("Fire1")){
+			if (Input.GetButton("Fire1")){
 				_gas = 1.0f;
 			}
-			if (Input.GetButtonUp("Fire1")){
+			else {
 				_gas = 0.0f;
 			}
-			if (Input.GetButtonDown("Fire2")){
+			if (Input.GetButton("Fire2")){
 				_brake = -1.0f;
 			}
-			if (Input.GetButtonUp("Fire2")){
+			else {
 				_brake = 0.0f;
 			}
 			_gas = _gas + _brake;
 
 		}
+	}
+
+
+	void LateUpdate(){
+			//Determine which turning animation to play
+		//float turnInput = Input.GetAxisRaw ("Horizontal");
+		if (_turning < -0.1f){
+				if (animationIsPlaying != 1) {
+					anim.ResetTrigger("RightTurn");
+					anim.ResetTrigger("Idle");
+					anim.SetTrigger ("LeftTurn");
+		
+
+					animationIsPlaying = 1;
+	
+				}
+			}
+		else if (_turning > 0.1f) {
+				if (animationIsPlaying != 2) {
+					anim.ResetTrigger("LeftTurn");
+					anim.ResetTrigger("Idle");
+					anim.SetTrigger ("RightTurn");
+
+					animationIsPlaying = 2;
+				}
+			}
+		else {
+			if (animationIsPlaying != 0){
+				anim.ResetTrigger("LeftTurn");
+				anim.ResetTrigger("RightTurn");
+				anim.SetTrigger ("Idle");
+
+				animationIsPlaying = 0;
+			}
+		}
+			 //else {
+			//anim.SetTrigger ("Idle");
+			//animationIsPlaying = 0;}
 	}
 
 	void FixedUpdate () {
