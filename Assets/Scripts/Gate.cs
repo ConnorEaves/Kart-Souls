@@ -2,35 +2,33 @@
 using System.Collections;
 
 public class Gate : MonoBehaviour {
-	bool gateDown;
-	float startY;
+	bool isDown;
+	float upY;
+	float downY;
+	public float speed;
+
 	// Use this for initialization
 	void Start () {
 		//InvokeRepeating ("GateToggle", 3.0f, 5.0f);
-		gateDown = true;
-		startY = transform.position.y;
+		isDown = true;
+		upY = 25;
+		downY = 15;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (transform.position.y);
-		if (transform.position.y < startY && gateDown) {
-			GateToggle ();
-		} else if (transform.position.y > (startY + 8.0f) && !gateDown) {
-			GateToggle ();
+		if (isDown) {
+			transform.position = Vector3.MoveTowards (transform.position, new Vector3 (transform.position.x, upY, transform.position.z), speed);
+		} else {
+			transform.position = Vector3.MoveTowards (transform.position, new Vector3 (transform.position.x, downY, transform.position.z), speed);
 		}
 
-		if (gateDown){
-			transform.Translate(Vector3.forward * Time.deltaTime * 3);
+		if (Vector3.Distance (transform.position, new Vector3 (transform.position.x, upY, transform.position.z)) < 0.25f) {
+			isDown = false;
 		}
-		else if (!gateDown){
-			transform.Translate(- Vector3.forward * Time.deltaTime * 3);
+		if (Vector3.Distance (transform.position, new Vector3 (transform.position.x, downY, transform.position.z)) < 0.25f) {
+			isDown = true;
 		}
-	}
-
-	void GateToggle()
-	{
-		gateDown = !gateDown;
 	}
 
 }
