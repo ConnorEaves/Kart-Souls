@@ -9,7 +9,7 @@ public class PauseMenuScript : MonoBehaviour
 
     public Button ResumeBut;
     public Button RestartBut;
-    public Button QuitBut2;
+    public Button QuitRaceBut;
 
     // Use this for initialization
     void Start()
@@ -18,7 +18,7 @@ public class PauseMenuScript : MonoBehaviour
 
         ResumeBut = ResumeBut.GetComponent<Button>();
         RestartBut = RestartBut.GetComponent<Button>();
-        QuitBut2 = QuitBut2.GetComponent<Button>();
+        QuitRaceBut = QuitRaceBut.GetComponent<Button>();
 
         PMenu.enabled = false;
     }
@@ -39,13 +39,25 @@ public class PauseMenuScript : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void RestartPressed()
+    public void RestartPressed1()
     {
         Application.LoadLevel(1);
         Time.timeScale = 1;
     }
 
-    public void QuitPressed2()
+    public void RestartPressed2()
+    {
+        Application.LoadLevel(2);
+        Time.timeScale = 1;
+    }
+
+    public void RestartPressed3()
+    {
+        Application.LoadLevel(3);
+        Time.timeScale = 1;
+    }
+
+    public void QuitRacePressed()
     {
         Application.LoadLevel(0);
         Time.timeScale = 1;

@@ -7,10 +7,12 @@ public class MainMenuScript : MonoBehaviour {
     public Canvas MMenuCanvas;
     public Canvas CharMenuCanvas;
     public Canvas MapMenuCanvas;
+    public Canvas ControlMenuCanvas;
 
     public Button StartBut;
     public Button ControlsBut;
     public Button OptionsBut;
+    public Button AboutBut;
     public Button ExitBut;
 
 	// Use this for initialization
@@ -24,11 +26,12 @@ public class MainMenuScript : MonoBehaviour {
         ControlsBut = ControlsBut.GetComponent<Button>();
         OptionsBut = OptionsBut.GetComponent<Button>();
         ExitBut = ExitBut.GetComponent<Button>();
+        AboutBut = AboutBut.GetComponent<Button>();
 
         MMenuCanvas.enabled = true;
         CharMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = false;
-    
+        ControlMenuCanvas.enabled = false;
 
     }
 	
@@ -39,7 +42,10 @@ public class MainMenuScript : MonoBehaviour {
 
     public void ControlsPressed()
     {
-        Application.LoadLevel(4);
+        MMenuCanvas.enabled = false;
+        CharMenuCanvas.enabled = false;
+        MapMenuCanvas.enabled = false;
+        ControlMenuCanvas.enabled = true;
     }
 	
     public void StartGamePressed()
@@ -47,6 +53,7 @@ public class MainMenuScript : MonoBehaviour {
         MMenuCanvas.enabled = false;
         CharMenuCanvas.enabled = true;
         MapMenuCanvas.enabled = false;
+        ControlMenuCanvas.enabled = false;
     }
     
     
@@ -59,6 +66,7 @@ public class MainMenuScript : MonoBehaviour {
             MMenuCanvas.enabled = true;
             CharMenuCanvas.enabled = false;
             MapMenuCanvas.enabled = false;
+            ControlMenuCanvas.enabled = false;
         }
 	
 	}
