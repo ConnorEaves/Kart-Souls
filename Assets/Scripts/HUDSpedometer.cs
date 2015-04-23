@@ -7,6 +7,7 @@ using System.Collections;
 public class HUDSpedometer : MonoBehaviour {
 
 	KartController playerKartController;
+	public float Sensitivity;
 
 
 	void Update () {
@@ -21,7 +22,7 @@ public class HUDSpedometer : MonoBehaviour {
 
 		}
 		float speed = playerKartController.CurrentSpeed;
-		transform.rotation = Quaternion.Euler (0, 0, -Mathf.Abs (speed) * 2.0f);
+		transform.rotation = Quaternion.Euler (0, 0, -Mathf.Abs (speed) * Sensitivity);
 	}
 
 }
