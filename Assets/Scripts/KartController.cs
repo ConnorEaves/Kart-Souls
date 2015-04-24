@@ -29,6 +29,8 @@ public class KartController : MonoBehaviour {
 
 	//reference to animator
 	public Animator anim;
+	//reference to audio source
+	AudioSource audio;
 	//for tracking animation
 	private int animationIsPlaying;
 
@@ -55,8 +57,13 @@ public class KartController : MonoBehaviour {
 		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
 		//initialize animationIsPlaying
 		animationIsPlaying = 0;
+		//initialize audio
+		audio = GetComponent<AudioSource> (); 
 	}
 	void Update (){
+		//pitch engine sound
+		audio.pitch = CurrentSpeed/(.6f*MaxSpeed)+.56f;
+
 		if (playerController) {
 			_turning = Input.GetAxis("Horizontal");
 			if (Input.GetButton("Fire1")){
