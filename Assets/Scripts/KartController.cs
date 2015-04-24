@@ -27,9 +27,6 @@ public class KartController : MonoBehaviour {
 	public ParticleSystem EngineParticleRight;
 	public ParticleSystem EngineParticleLeft;
 
-	//reference to audio
-	AudioSource audio;
-	private float idle;
 	//reference to animator
 	public Animator anim;
 	//for tracking animation
@@ -58,14 +55,8 @@ public class KartController : MonoBehaviour {
 		engineParticleLeft = EngineParticleLeft.GetComponent<ParticleSystem> ();
 		//initialize animationIsPlaying
 		animationIsPlaying = 0;
-		//initialize audio
-		audio = GetComponent<AudioSource> (); 
-	
 	}
 	void Update (){
-
-		audio.pitch = CurrentSpeed/(.6f*MaxSpeed)+.56f;
-		
 		if (playerController) {
 			_turning = Input.GetAxis("Horizontal");
 			if (Input.GetButton("Fire1")){
@@ -210,6 +201,7 @@ public class KartController : MonoBehaviour {
 		Debug.DrawLine (transform.position, transform.position + transform.up * 3, Color.green);
 		Debug.DrawLine (transform.position, transform.position + transform.forward * 3, Color.blue);
 		#endregion
+
 	}
 
 	//Reduce speed based on angle of impact with a wall. Up to a maximum of 100%
