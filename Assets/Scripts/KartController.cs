@@ -30,7 +30,6 @@ public class KartController : MonoBehaviour {
 	//reference to animator
 	public Animator anim;
 	//reference to audio source
-	public AudioClip crash;
 	AudioSource audio;
 	//for tracking animation
 	private int animationIsPlaying;
@@ -215,9 +214,7 @@ public class KartController : MonoBehaviour {
 	//Reduce speed based on angle of impact with a wall. Up to a maximum of 100%
 	void OnCollisionEnter(Collision coll){
 		float angle = 0;
-
 		if (coll.collider.tag == "wall") {
-			AudioSource.PlayClipAtPoint (crash, coll.transform.position);
 			Ray ray = new Ray (transform.position + transform.up * 0.5f, transform.forward);
 			Debug.DrawRay(transform.position + transform.up * 0.5f, transform.forward);
 			RaycastHit hit;
