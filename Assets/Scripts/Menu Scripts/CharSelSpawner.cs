@@ -15,7 +15,7 @@ public class CharSelSpawner : MonoBehaviour {
 		CameraFollow camera = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<CameraFollow>();
 
 		//spedometer = GameObject.Find ("Needle Pivot").GetComponent<HUDSpedometer> ();
-
+// Sets the camera and cart to the correct character based on PlayerPref
         if (savedPlayer == 1)
         {
 			camera.Target = karto1.transform;

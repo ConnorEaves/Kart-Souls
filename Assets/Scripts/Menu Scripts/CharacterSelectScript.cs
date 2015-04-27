@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 
 public class CharacterSelectScript : MonoBehaviour {
-
+    //Set the variable for the character to be selected
     int charSelected = 0;
     
     public Canvas MMenuCanvas;
@@ -30,6 +30,7 @@ public class CharacterSelectScript : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
+        // Go to menu when Escape is hit
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             MMenuCanvas.enabled = true;
@@ -37,6 +38,8 @@ public class CharacterSelectScript : MonoBehaviour {
             MapMenuCanvas.enabled = false;
         }
     }
+   
+    //  PlayerPref to hold which character is pressed
     public void Player1Pressed()
     {
         charSelected = 1;

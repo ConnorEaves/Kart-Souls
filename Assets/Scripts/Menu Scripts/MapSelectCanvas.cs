@@ -23,8 +23,11 @@ public class MapSelectCanvas : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	
+    
+    void Update () 
     {
+// When escape is hit then bring up the main menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             MMenuCanvas.enabled = true;
@@ -32,7 +35,7 @@ public class MapSelectCanvas : MonoBehaviour {
             MapMenuCanvas.enabled = false;
         }
 	}
-
+// Loads the correct scene for the level
     public void Map1Pressed()
     {
         Application.LoadLevel(1);

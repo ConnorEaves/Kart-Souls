@@ -19,6 +19,7 @@ public class MainMenuScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+// Disable and enables the correct menus
         MMenuCanvas = MMenuCanvas.GetComponent<Canvas>();
         CharMenuCanvas = CharMenuCanvas.GetComponent<Canvas>();
         MapMenuCanvas = MapMenuCanvas.GetComponent<Canvas>();
@@ -36,11 +37,14 @@ public class MainMenuScript : MonoBehaviour
 
     }
 
+ 
+ // If exit button is hit then quits
     public void ExitButtonPressed()
     {
         Application.Quit();
     }
 
+  //Controls is pressed and brings up controls canvas
     public void ControlsPressed()
     {
         MMenuCanvas.enabled = false;
@@ -49,6 +53,7 @@ public class MainMenuScript : MonoBehaviour
         ControlMenuCanvas.enabled = true;
     }
 
+// Goes to the character select  menu and disables all the other menus
     public void StartGamePressed()
     {
         MMenuCanvas.enabled = false;

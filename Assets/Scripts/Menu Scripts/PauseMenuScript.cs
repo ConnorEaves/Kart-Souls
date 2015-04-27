@@ -26,6 +26,7 @@ public class PauseMenuScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+// When escape is hit pull up the pause menu and pause the game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             PMenu.enabled = true;
@@ -33,12 +34,14 @@ public class PauseMenuScript : MonoBehaviour
         }
     }
 
+// Disable the pause menu and sets the timescale to 1 
     public void ResumePressed()
     {
         PMenu.enabled = false;
         Time.timeScale = 1;
     }
 
+// Depending on what scene the correct scene is reloaded
     public void RestartPressed1()
     {
         Application.LoadLevel(1);
@@ -57,6 +60,7 @@ public class PauseMenuScript : MonoBehaviour
         Time.timeScale = 1;
     }
 
+// Loads the main menu and sets the timescale to 1  
     public void QuitPressed2()
     {
         Application.LoadLevel(0);
