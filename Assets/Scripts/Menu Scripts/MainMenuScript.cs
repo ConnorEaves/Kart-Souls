@@ -9,6 +9,7 @@ public class MainMenuScript : MonoBehaviour
     public Canvas CharMenuCanvas;
     public Canvas MapMenuCanvas;
     public Canvas ControlMenuCanvas;
+    public Canvas AboutMenuCanvas;
 
     public Button StartBut;
     public Button ControlsBut;
@@ -34,6 +35,7 @@ public class MainMenuScript : MonoBehaviour
         CharMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = false;
+        AboutMenuCanvas.enabled = false;
 
     }
 
@@ -51,6 +53,7 @@ public class MainMenuScript : MonoBehaviour
         CharMenuCanvas.enabled = false;
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = true;
+        AboutMenuCanvas.enabled = false;
     }
 
 // Goes to the character select  menu and disables all the other menus
@@ -60,9 +63,17 @@ public class MainMenuScript : MonoBehaviour
         CharMenuCanvas.enabled = true;
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = false;
+        AboutMenuCanvas.enabled = false;
     }
 
-
+    public void AboutPressed()
+    {
+        MMenuCanvas.enabled = false;
+        CharMenuCanvas.enabled = false;
+        MapMenuCanvas.enabled = false;
+        ControlMenuCanvas.enabled = false;
+        AboutMenuCanvas.enabled = true;
+    }
 
     // Update is called once per frame
     void Update()
@@ -73,6 +84,7 @@ public class MainMenuScript : MonoBehaviour
             CharMenuCanvas.enabled = false;
             MapMenuCanvas.enabled = false;
             ControlMenuCanvas.enabled = false;
+            AboutMenuCanvas.enabled = false;
         }
 
     }
