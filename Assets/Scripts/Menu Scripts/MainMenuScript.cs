@@ -10,6 +10,7 @@ public class MainMenuScript : MonoBehaviour
     public Canvas MapMenuCanvas;
     public Canvas ControlMenuCanvas;
     public Canvas AboutMenuCanvas;
+    public Canvas OptionsMenuCanvas;
 
     public Button StartBut;
     public Button ControlsBut;
@@ -36,7 +37,7 @@ public class MainMenuScript : MonoBehaviour
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = false;
         AboutMenuCanvas.enabled = false;
-
+        OptionsMenuCanvas.enabled = false;
     }
 
  
@@ -54,6 +55,7 @@ public class MainMenuScript : MonoBehaviour
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = true;
         AboutMenuCanvas.enabled = false;
+        OptionsMenuCanvas.enabled = false;
     }
 
 // Goes to the character select  menu and disables all the other menus
@@ -64,8 +66,10 @@ public class MainMenuScript : MonoBehaviour
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = false;
         AboutMenuCanvas.enabled = false;
+        OptionsMenuCanvas.enabled = false;
     }
 
+    // goes to the about menu and disables all other menus
     public void AboutPressed()
     {
         MMenuCanvas.enabled = false;
@@ -73,6 +77,17 @@ public class MainMenuScript : MonoBehaviour
         MapMenuCanvas.enabled = false;
         ControlMenuCanvas.enabled = false;
         AboutMenuCanvas.enabled = true;
+        OptionsMenuCanvas.enabled = false;
+    }
+
+    public void OptionsPressed()
+    {
+        MMenuCanvas.enabled = false;
+        CharMenuCanvas.enabled = false;
+        MapMenuCanvas.enabled = false;
+        ControlMenuCanvas.enabled = false;
+        AboutMenuCanvas.enabled = false;
+        OptionsMenuCanvas.enabled = true;
     }
 
     // Update is called once per frame
@@ -85,6 +100,7 @@ public class MainMenuScript : MonoBehaviour
             MapMenuCanvas.enabled = false;
             ControlMenuCanvas.enabled = false;
             AboutMenuCanvas.enabled = false;
+            OptionsMenuCanvas.enabled = false;
         }
 
     }

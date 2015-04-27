@@ -40,6 +40,7 @@ public class CharacterSelectScript : MonoBehaviour {
     }
    
     //  PlayerPref to hold which character is pressed
+    // Depending on which one is picked, set the playerpref to that and disable the main and char menu and enable the map menu
     public void Player1Pressed()
     {
         charSelected = 1;
