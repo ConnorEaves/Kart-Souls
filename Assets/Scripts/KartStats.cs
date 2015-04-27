@@ -2,6 +2,7 @@
 using System.Collections;
 
 // Displays Kart stats on screen
+// Used for testing only
 public class KartStats : MonoBehaviour {
 
 	public GameObject Kart;

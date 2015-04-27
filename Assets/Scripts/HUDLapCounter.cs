@@ -12,6 +12,7 @@ public class HUDLapCounter : MonoBehaviour {
 	}
 
 	void Update () {
+		// Get player controlled kart KartLapTimer
 		if (playerKartLapTimer == null) {
 			GameObject[] karts = GameObject.FindGameObjectsWithTag("kart");
 			foreach (GameObject kart in karts){
@@ -24,6 +25,7 @@ public class HUDLapCounter : MonoBehaviour {
 		}
 		int lap = playerKartLapTimer.lapCounter;
 
+		// Display the proper lap counter
 		LapCounterText.text = "Lap: " + (lap + 1) + "/3";
 	}
 }

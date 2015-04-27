@@ -20,10 +20,12 @@ public class Countdown : MonoBehaviour {
 
 	public IEnumerator StartRace () {
 
+		// Disable all karts
 		foreach (GameObject kart in Karts) {
 			kart.GetComponent<KartController> ().enabled = false;
 		}
 
+		// Display Countdown
 		countdownText.text = "3";
 		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position);
 		yield return new WaitForSeconds (1.0f);
@@ -33,6 +35,7 @@ public class Countdown : MonoBehaviour {
 		countdownText.text = "1";
 		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position);
 		yield return new WaitForSeconds (1.0f);
+		// ReEnable karts
 		foreach (GameObject kart in Karts) {
 			kart.GetComponent<KartController> ().enabled = true;
 		}

@@ -11,6 +11,7 @@ public class HUDSpedometer : MonoBehaviour {
 
 
 	void Update () {
+		// let player controlled kartcontroller
 		if (playerKartController == null) {
 			GameObject[] karts = GameObject.FindGameObjectsWithTag("kart");
 			foreach (GameObject kart in karts){
@@ -21,6 +22,7 @@ public class HUDSpedometer : MonoBehaviour {
 			}
 
 		}
+		// rotate spedometer needle relative to speed
 		float speed = playerKartController.CurrentSpeed;
 		transform.rotation = Quaternion.Euler (0, 0, -Mathf.Abs (speed) * Sensitivity);
 	}

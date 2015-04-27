@@ -123,15 +123,8 @@ public class KartController : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		// Temp variables cached for performance
-
-
-
+		
 		isGrounded = CheckGrounded ();
-
-
-
-
 	
 		if (_gas > 0 && isGrounded) {			// Are we accelerating?
 			CurrentSpeed += Acceleration * Time.deltaTime;

@@ -57,6 +57,7 @@ public class AIController : MonoBehaviour {
 			
 	}
 
+	// get next waypoint
 	public void HitNav(GameObject hitNav){
 		if (hitNav == navPoints [navCounter]) {
 			if (navCounter == navPoints.Length - 1)
@@ -68,6 +69,7 @@ public class AIController : MonoBehaviour {
 		}
 	}
 
+	// Movement inputs for AI
 	void Forward(){
 		kartController.gameInput (1, 0);
 	}
