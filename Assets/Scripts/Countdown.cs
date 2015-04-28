@@ -15,7 +15,6 @@ public class Countdown : MonoBehaviour {
 		countdownText = GetComponent<Text> ();
 		StartCoroutine ("StartRace");
 		Debug.Log ("Countdown Ended");
-
 	}
 
 	public IEnumerator StartRace () {
@@ -25,22 +24,24 @@ public class Countdown : MonoBehaviour {
 			kart.GetComponent<KartController> ().enabled = false;
 		}
 
+        float soundfxvolume = PlayerPrefs.GetFloat("sfxvolume");
+
 		// Display Countdown
 		countdownText.text = "3";
-		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position);
+		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position, soundfxvolume);
 		yield return new WaitForSeconds (1.0f);
 		countdownText.text = "2";
-		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position);
+		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position, soundfxvolume);
 		yield return new WaitForSeconds (1.0f);
 		countdownText.text = "1";
-		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position);
+		AudioSource.PlayClipAtPoint (count, Camera.main.transform.position, soundfxvolume);
 		yield return new WaitForSeconds (1.0f);
 		// ReEnable karts
 		foreach (GameObject kart in Karts) {
 			kart.GetComponent<KartController> ().enabled = true;
 		}
 		countdownText.text = "GO!";
-		AudioSource.PlayClipAtPoint (go, Camera.main.transform.position);
+		AudioSource.PlayClipAtPoint (go, Camera.main.transform.position, soundfxvolume);
 		yield return new WaitForSeconds (2.0f);
 		countdownText.text = "";
 		

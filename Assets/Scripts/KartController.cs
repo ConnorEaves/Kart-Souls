@@ -59,12 +59,12 @@ public class KartController : MonoBehaviour {
 		//initialize animationIsPlaying
 		animationIsPlaying = 0;
 		//initialize audio
-		audio = GetComponent<AudioSource> (); 
+		audio = GetComponent<AudioSource> ();
 	}
 	void Update (){
 		//pitch engine sound
 		audio.pitch = CurrentSpeed/(.6f*MaxSpeed)+.56f;
-
+        audio.volume = PlayerPrefs.GetFloat("sfxvolume");
 		if (playerController) {
 			_turning = Input.GetAxis("Horizontal");
 			if (Input.GetButton("Fire1")){
@@ -209,7 +209,7 @@ public class KartController : MonoBehaviour {
 	void OnCollisionEnter(Collision coll){
 		float angle = 0;
 		if (coll.collider.tag == "wall") {
-			AudioSource.PlayClipAtPoint (crash, coll.transform.position);
+            AudioSource.PlayClipAtPoint(crash, coll.transform.position, PlayerPrefs.GetFloat("sfxvolume"));
 			Ray ray = new Ray (transform.position + transform.up * 0.5f, transform.forward);
 			Debug.DrawRay(transform.position + transform.up * 0.5f, transform.forward);
 			RaycastHit hit;

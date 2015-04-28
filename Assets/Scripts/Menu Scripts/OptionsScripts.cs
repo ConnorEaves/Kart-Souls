@@ -17,9 +17,11 @@ public class OptionsScripts : MonoBehaviour {
         // Make the text equal the value of the slider (0 - 1)
         MusicText.text = MusicSlider.value.ToString();
         SFXText.text = SFXSlider.value.ToString();
+        
         // Set the value of the slider to a variable
         savedMusicVol = MusicSlider.value;
         savedSFXVol = SFXSlider.value;
+       
         // Set the player pref equal to the value of the variable
         PlayerPrefs.SetFloat("musicvolume", (savedMusicVol));
         PlayerPrefs.SetFloat("sfxvolume", (savedSFXVol));
