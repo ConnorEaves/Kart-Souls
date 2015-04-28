@@ -63,18 +63,21 @@ public class PauseMenuScript : MonoBehaviour
 // Depending on what scene the correct scene is reloaded
     public void RestartPressed1()
     {
+		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
         Application.LoadLevel(1);
         Time.timeScale = 1;
     }
 
     public void RestartPressed2()
     {
+		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
         Application.LoadLevel(2);
         Time.timeScale = 1;
     }
 
     public void RestartPressed3()
     {
+		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
         Application.LoadLevel(3);
         Time.timeScale = 1;
     }
@@ -82,6 +85,7 @@ public class PauseMenuScript : MonoBehaviour
 // Loads the main menu and sets the timescale to 1  
     public void QuitPressed2()
     {
+		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
         Application.LoadLevel(0);
         Time.timeScale = 1;
     }
