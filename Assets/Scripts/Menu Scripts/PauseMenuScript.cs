@@ -11,6 +11,8 @@ public class PauseMenuScript : MonoBehaviour
     public Button RestartBut;
     public Button QuitBut2;
 
+	private float savedSFXVol;
+
     // Use this for initialization
     void Start()
     {
@@ -21,6 +23,7 @@ public class PauseMenuScript : MonoBehaviour
         QuitBut2 = QuitBut2.GetComponent<Button>();
 
         PMenu.enabled = false;
+		savedSFXVol = PlayerPrefs.GetFloat("sfxvolume");
     }
 
     // Update is called once per frame
@@ -31,6 +34,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             PMenu.enabled = true;
             Time.timeScale = 0;
+			PlayerPrefs.SetFloat("sfxvolume", 0.0f);
         }
     }
 
@@ -39,6 +43,7 @@ public class PauseMenuScript : MonoBehaviour
     {
         PMenu.enabled = false;
         Time.timeScale = 1;
+		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
     }
 
 // Depending on what scene the correct scene is reloaded
