@@ -12,6 +12,8 @@ public class PauseMenuScript : MonoBehaviour
     public Button QuitBut2;
 
 	private float savedSFXVol;
+	private bool endCanvasEnabled;
+	private Canvas endCanvas;
 
     // Use this for initialization
     void Start()
@@ -24,6 +26,9 @@ public class PauseMenuScript : MonoBehaviour
 
         PMenu.enabled = false;
 		savedSFXVol = PlayerPrefs.GetFloat("sfxvolume");
+
+		endCanvas = GameObject.FindGameObjectWithTag ("endRaceCanvas").GetComponent<Canvas> ();
+		endCanvasEnabled = false;
     }
 
     // Update is called once per frame
@@ -35,6 +40,11 @@ public class PauseMenuScript : MonoBehaviour
             PMenu.enabled = true;
             Time.timeScale = 0;
 			PlayerPrefs.SetFloat("sfxvolume", 0.0f);
+			if ( endCanvas.enabled )
+			{
+				endCanvasEnabled = true;
+				endCanvas.enabled = false;
+			}
         }
     }
 
@@ -44,6 +54,10 @@ public class PauseMenuScript : MonoBehaviour
         PMenu.enabled = false;
         Time.timeScale = 1;
 		PlayerPrefs.SetFloat("sfxvolume", savedSFXVol);
+		if (endCanvasEnabled) {
+			endCanvas.enabled = true;
+		}
+
     }
 
 // Depending on what scene the correct scene is reloaded
